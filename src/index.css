@@ -72,6 +72,20 @@ body {
   overflow: visible;
 }
 
+.backgroundImage4 {
+  background-image: linear-gradient(
+      rgba(231, 222, 222, 0.357),
+      rgba(64, 57, 57, 0.483)
+    ),
+    url("https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+  background-attachment: fixed;
+  overflow: visible;
+}
+
 .img-profile {
   width: 180px;
   height: 180px;

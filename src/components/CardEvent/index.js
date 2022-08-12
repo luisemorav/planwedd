@@ -6,7 +6,7 @@ const CardEvent = () => {
       <div
         className="card p-3 mb-3"
         style={{
-          background: "rgba(255, 255, 255, 0.4)",
+          background: "rgba(255, 255, 255, 0.25)",
           backdropFilter: "blur(10px)",
         }}
       >
