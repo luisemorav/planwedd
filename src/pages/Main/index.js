@@ -7,7 +7,7 @@ const Main = () => {
                 <div className="backgroundImage3" style={{height:'100vh'}}>
                     <div className="container d-flex flex-column align-items-center justify-content-center p-5" style={{height:'100%'}}>
                         <div className="d-flex flex-column">
-                            <h1 className="escalable-font1" style={{textTransform:'uppercase',fontFamily:'var(--title-font)', fontWeight:'900',letterSpacing:'3px',color:'white',textShadow:'0 0 20px black'}}>Adquiere obsequios ya!</h1>
+                            <h1 className="escalable-font1" style={{textTransform:'uppercase',fontFamily:'var(--title-font)', fontWeight:'900',letterSpacing:'3px',color:'white',textShadow:'0 0 20px black'}}>Adquiere o regala obsequios ya!</h1>
                             <button className="btn btn-success px-5 py-0 escalable-font2" style={{alignSelf:'start'}}>
                                 comprar
                             </button>
