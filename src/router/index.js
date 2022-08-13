@@ -1,11 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-<<<<<<< HEAD
+// <<<<<<< HEAD
 // import MyProfile from "../pages/MyProfile";
 // import MyEvent from "../pages/MyEvent";
 // import CreateEvent from "../pages/CreateEvent";
-import {LoginView, RegisterView, MyProfile,MyEvent,CreateEvent, MainView, UserProfielView} from '../pages'
-=======
+// import {LoginView, RegisterView, MyProfile,MyEvent,CreateEvent, MainView, UserProfielView} from '../pages'
+// =======
 import {
+  MainView,
   LoginView,
   RegisterView,
   MyProfile,
@@ -14,8 +15,9 @@ import {
   CreateEvent,
   Search,
   Shoppingcart,
+  UserProfielView
 } from "../pages";
->>>>>>> ccde0ab430b34ea1db7fbf867300fc84fb1ba549
+// >>>>>>> ccde0ab430b34ea1db7fbf867300fc84fb1ba549
 
 const Router = () => {
   return (
