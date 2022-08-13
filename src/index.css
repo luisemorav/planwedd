@@ -29,6 +29,14 @@ body {
   font-family: var(--paragraph-font), sans-serif;
 }
 
+.home {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
 .btn-first {
   background-color: var(--button-color);
   font-weight: 500;
