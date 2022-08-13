@@ -30,9 +30,11 @@ const Login = ()=>{
                                 <button class="btn btn-outline-success" type="button" id="button-addon2" style={{border:'2px solid var(--button-color)',color:'var(--button-color)'}}><i class="fa-solid fa-eye"></i></button>
                             </div>
                             <div className="d-grid">
-                                <button className="btn btn-outline-success p-2" style={{border:'2px solid var(--button-color)',color:'var(--button-color)'}}>
-                                    Iniciar sesion
-                                </button>
+                                <Link to={'/main'}>
+                                    <button className="btn btn-outline-success p-2" style={{width:'100%',border:'2px solid var(--button-color)',color:'var(--button-color)'}}>
+                                        Iniciar sesion
+                                    </button>
+                                </Link>
                             </div>
                         </form>
                     </div>
