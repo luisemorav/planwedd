@@ -1,8 +1,21 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+<<<<<<< HEAD
 // import MyProfile from "../pages/MyProfile";
 // import MyEvent from "../pages/MyEvent";
 // import CreateEvent from "../pages/CreateEvent";
 import {LoginView, RegisterView, MyProfile,MyEvent,CreateEvent, MainView, UserProfielView} from '../pages'
+=======
+import {
+  LoginView,
+  RegisterView,
+  MyProfile,
+  MyEvent,
+  Events,
+  CreateEvent,
+  Search,
+  Shoppingcart,
+} from "../pages";
+>>>>>>> ccde0ab430b34ea1db7fbf867300fc84fb1ba549
 
 const Router = () => {
   return (
@@ -14,15 +27,18 @@ const Router = () => {
         <Route path="/register" element={<RegisterView />} />
         <Route path="/myprofile" element={<MyProfile />} />
         <Route path="/myevent" element={<MyEvent />} />
+        <Route path="/events" element={<Events />} />
         <Route path="/createevent" element={<CreateEvent />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/shoppingcart" element={<Shoppingcart />} />
         <Route
-        path="*"
-        element={
-          <main style={{ padding: "1rem" }}>
-            <p>Esta página no existe</p>
-          </main>
-        }
-      />
+          path="*"
+          element={
+            <main style={{ padding: "1rem" }}>
+              <p>Esta página no existe</p>
+            </main>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

@@ -1,9 +1,7 @@
 const MyEvent = () => {
   return (
-    <div>
-      <h1>Mi Evento</h1>
-    </div>
-  );
-};
+    <h1>My event</h1>
+  )
+}
 
 export default MyEvent;
