@@ -18,7 +18,7 @@ const Main = () => {
                     <div className="container py-5">
                         <div className="row gap-3 justify-content-center ">
                         <div className="col-4 col-xl d-flex justify-content-center align-items-center py-1  gap-2 card text-center"
-                            style={{minHeight:'300px'}}
+                            style={{minHeight:'300px',maxHeight:'400px'}}
                             >
                                 <div className="d-flex align-items-end" style={{height:'50%'}}>
                                     <i class="fa-solid fa-user escalable-font1"></i>
@@ -29,7 +29,7 @@ const Main = () => {
                                 </div>
                             </div>
                             <div className="col-4 col-xl d-flex justify-content-center align-items-center py-1  gap-2 card text-center"
-                            style={{minHeight:'300px'}}
+                            style={{minHeight:'300px',maxHeight:'400px'}}
                             >
                                 <div className="d-flex align-items-end" style={{height:'50%'}}>
                                     <i class="fa-solid fa-gift escalable-font1" ></i>
@@ -40,7 +40,7 @@ const Main = () => {
                                 </div>
                             </div>
                             <div className="col-4 col-xl d-flex justify-content-center align-items-center py-1  gap-2 card text-center"
-                            style={{minHeight:'300px'}}
+                            style={{minHeight:'300px',maxHeight:'400px'}}
                             >
                                 <div className="d-flex align-items-end" style={{height:'50%'}}>
                                     <i class="fa-solid fa-envelope escalable-font1" ></i>
@@ -51,7 +51,7 @@ const Main = () => {
                                 </div>
                             </div>
                             <div className="col-4 col-xl d-flex justify-content-center align-items-center py-1  gap-2 card text-center"
-                            style={{minHeight:'300px'}}
+                            style={{minHeight:'300px',maxHeight:'400px'}}
                             >
                                 <div className="d-flex align-items-end" style={{height:'50%'}}>
                                     <i class="fa-solid fa-champagne-glasses escalable-font1"></i>

@@ -2,14 +2,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import MyProfile from "../pages/MyProfile";
 // import MyEvent from "../pages/MyEvent";
 // import CreateEvent from "../pages/CreateEvent";
-import {LoginView, RegisterView, MyProfile,MyEvent,CreateEvent, MainView,ProfielView} from '../pages'
+import {LoginView, RegisterView, MyProfile,MyEvent,CreateEvent, MainView, UserProfielView} from '../pages'
 
 const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/main" element={<MainView />} />
-        <Route path="/profile/:username" element={<ProfielView />} />
+        <Route path="/user/:username" element={<UserProfielView />} />
         <Route path="/login" element={<LoginView />} />
         <Route path="/register" element={<RegisterView />} />
         <Route path="/myprofile" element={<MyProfile />} />
