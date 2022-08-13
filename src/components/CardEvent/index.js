@@ -16,7 +16,7 @@ const CardEvent = () => {
         <p className="h5">Fecha del Evento: 16/08/2022 🎉</p>
         <div className="row justify-content-between px-3">
           <p className="h2 col-6">Paco y Lulu</p>
-          <Link to={"/profile"} className="btn btn-first col-2">
+          <Link to={"/user/:username"} className="btn btn-first col-2">
             Ir al evento
           </Link>
         </div>

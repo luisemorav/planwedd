@@ -21,14 +21,15 @@ const Main = () => {
                   textShadow: "0 0 20px black",
                 }}
               >
-                Adquiere o regala obsequios ya!
+                PLANWEED
               </h1>
+              <span className="h2 mb-5" style={{color: "#fff", textShadow: "0 0 6px black"}}>Tu boda con los regalos que realmente quieres!</span>
               <Link to={"/register"}>
                 <button
                   className="btn btn-success px-5 py-0 escalable-font2"
                   style={{ alignSelf: "start" }}
                 >
-                  comprar
+                  Empezar
                 </button>
               </Link>
             </div>
@@ -48,7 +49,7 @@ const Main = () => {
                   <i className="fa-solid fa-user escalable-font1"></i>
                 </div>
                 <div style={{ height: "50%" }}>
-                  <h5>Disfruta</h5>
+                  <h5>1</h5>
                   <p>Crea tu perfil y personalizalo</p>
                 </div>
               </div>
@@ -63,7 +64,7 @@ const Main = () => {
                   <i className="fa-solid fa-gift escalable-font1"></i>
                 </div>
                 <div style={{ height: "50%" }}>
-                  <h5>Disfruta</h5>
+                  <h5>2</h5>
                   <p>Crea tu lista de regalos para la boda</p>
                 </div>
               </div>
@@ -78,7 +79,7 @@ const Main = () => {
                   <i className="fa-solid fa-envelope escalable-font1"></i>
                 </div>
                 <div style={{ height: "50%" }}>
-                  <h5>Disfruta</h5>
+                  <h5>3</h5>
                   <p>Compartelo con tus amigos</p>
                 </div>
               </div>
@@ -93,7 +94,7 @@ const Main = () => {
                   <i className="fa-solid fa-champagne-glasses escalable-font1"></i>
                 </div>
                 <div style={{ height: "50%" }}>
-                  <h5>Disfruta</h5>
+                  <h5>4</h5>
                   <p>Recibe los regalos de tus amigos en efectivo</p>
                 </div>
               </div>

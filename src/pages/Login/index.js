@@ -30,37 +30,57 @@ const Login = () => {
             <h1 style={{ fontSize: "3em" }}>PLANWEED</h1>
             <p style={{ fontSize: "2em" }}>Bienvenido, Inicia Sesion!</p>
             <p style={{ fontSize: "1em" }}>
-              o si no tienes una cuenta <Link to={"/register"}>regístrate</Link>
+              o si no tienes una cuenta
+              <Link to={"/register"}>registrate</Link>
             </p>
           </div>
           <div className="container mt-5">
+            {/* inputs */}
             <form action="" className="d-flex flex-column gap-3">
               <input
                 className="form-control p-3"
                 type="text"
-                placeholder="Nombre de usuario o email"
+                placeholder="nombre de usuario o email"
+                style={{
+                  background: "transparent",
+                  border: "2px solid var(--button-color)",
+                }}
               />
 
-              <div className="input-group mb-3">
+              <div class="input-group mb-3">
                 <input
+                  // onChange={inputValidate}
                   type="text"
                   className="form-control p-3"
-                  placeholder="Repetir contraseña"
+                  placeholder="contrasenia"
                   aria-label="Recipient's username"
                   aria-describedby="button-addon2"
+                  style={{
+                    background: "transparent",
+                    border: "2px solid var(--button-color)",
+                  }}
                 />
                 <button
-                  className="btn btn-outline-success"
+                  class="btn btn-outline-success"
                   type="button"
                   id="button-addon2"
+                  style={{
+                    border: "2px solid var(--button-color)",
+                    color: "var(--button-color)",
+                  }}
                 >
-                  <i className="fa-solid fa-eye"></i>
+                  <i class="fa-solid fa-eye"></i>
                 </button>
               </div>
               <div className="d-grid">
-                <button className="btn btn-outline-success p-2">
-                  Iniciar sesion
-                </button>
+                <Link to={"/user/admin"}>
+                  <button
+                    className="btn btn-success p-2"
+                    style={{ width: "100%", background: "var(--button-color)" }}
+                  >
+                    Iniciar Sesion
+                  </button>
+                </Link>
               </div>
             </form>
           </div>
@@ -93,7 +113,6 @@ const Login = () => {
             </div>
           </div>
         </div>
-        <div></div>
       </div>
     </div>
   );
