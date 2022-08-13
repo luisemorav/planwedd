@@ -73,7 +73,7 @@ const Login = () => {
                 </button>
               </div>
               <div className="d-grid">
-                <Link to={"/user/admin"}>
+                <Link to={"/createevent"}>
                   <button
                     className="btn btn-success p-2"
                     style={{ width: "100%", background: "var(--button-color)" }}

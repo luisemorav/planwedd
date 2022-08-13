@@ -1,4 +1,5 @@
 import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 const Profile = () => {
   const { username } = useParams();
   return (
@@ -10,7 +11,7 @@ const Profile = () => {
             style={{ background: "blue", height: "300px", overflow: "hidden" }}
           >
             <img
-              src="https://scontent.flim16-2.fna.fbcdn.net/v/t39.30808-6/291055282_1477964352667216_2997685414931243401_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=e3f864&_nc_eui2=AeFK7OO1Q7sNzJb3BtIrt8sdqLhVB3aYB-aouFUHdpgH5jxOLHFRl6_NGcQaBl8g-x6sr7_mJZL3qGwCE_J7q7H0&_nc_ohc=8CiksDnMjboAX_R1Oa5&_nc_ht=scontent.flim16-2.fna&oh=00_AT_bnFQFcLoLuNrOBVHa-71BE_Hy5gf3878XWQ5SMFeAKA&oe=62FB7214"
+              src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
               alt=""
               style={{
                 objectFit: "cover",
@@ -44,9 +45,9 @@ const Profile = () => {
             </div>
             <div className="col-12 col-md-4 d-flex justify-content-center">
               <h3 className="escalable-font2 d-flex gap-3 justify-content-center align-items-center">
-                {username}
+                Paco
                 <i className="fa-solid fa-heart"></i>
-                xpersona
+                Lulu
               </h3>
             </div>
             <div className="col-12 col-md-4 row gap-2 justify-content-center">
@@ -165,15 +166,15 @@ const Profile = () => {
                     className="row d-flex align-items-center p-3 gap-3 rounded-4"
                     style={{ background: "var(--main-color)" }}
                   >
-                    <button
-                      className="col-3 btn btn-success p-2"
+                    <Link
+                      to={"/shoppingcart"} className="col-3 btn btn-success p-2"
                       style={{
                         background: "var(--button-color)",
                         fontWeight: "bold",
                       }}
                     >
-                      Crear publicacion
-                    </button>
+                      Dejar una dedicatoria
+                    </Link>
                     <input
                       className="col form-control p-2"
                       type="text"
