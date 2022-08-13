@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams,Link } from "react-router-dom";
 const Profile = () => {
     const { username } = useParams();
     return (
@@ -26,14 +26,16 @@ const Profile = () => {
                                 <i class="fa-solid fa-message"></i>
                                 Enviar mensaje
                             </button>
-                            <button className="btn btn-success d-flex justify-content-center align-items-center gap-3" style={{maxWidth:'200px', background:'var(--button-color)'}}>
-                                <i class="fa-solid fa-gift"></i>
-                                Regalar
-                            </button>
+                            <Link className="container px-5" to={'/createevent'}>
+                                    <button className="btn btn-success p-2 d-flex justify-content-center gap-3" style={{width:'100%',background:'var(--button-color)'}}>
+                                        <i class="fa-solid fa-gift"></i>
+                                        Regalar
+                                    </button>
+                            </Link>
                         </div>
                     </div>
                     <div className="container d-grid align-items-center">
-                    <div className="row" style={{transform:'translateY(-50px)'}}>
+                    <div className="row gap-3" style={{transform:'translateY(-50px)'}}>
                         <div className="col d-flex justify-content-center">
                             <button className="btn btn-dark" style={{fontSize:'1.5em',fontWeight:'bold', padding:'0 4em'}}>Post</button>
                         </div>

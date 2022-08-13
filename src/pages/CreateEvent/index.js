@@ -1,5 +1,7 @@
+import {Link} from 'react-router-dom';
 import CheckBoxD from "../../components/Checkbox";
 import Option from "../../components/Option";
+
 
 const CreateEvent = () => {
   return (
@@ -125,9 +127,11 @@ const CreateEvent = () => {
             </div>
           </div>
           <div className="row justify-content-center mt-3">
-            <button className="btn btn-first col-2">
-              Crear evento
-            </button>
+            <Link to={'/user/daniel'}>
+              <button className="btn btn-first col-2">
+                Crear evento
+              </button>
+            </Link>
           </div>
         </div>
       </div>

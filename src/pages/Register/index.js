@@ -46,9 +46,11 @@ const Register = () => {
                                 <button class="btn btn-outline-success" type="button" id="button-addon2" style={{border:'2px solid var(--button-color)',color:'var(--button-color)'}}><i class="fa-solid fa-eye"></i></button>
                             </div>
                             <div className="d-grid">
-                                <button className="btn btn-outline-success p-2" style={{border:'2px solid var(--button-color)',color:'var(--button-color)'}}>
-                                    Registrarse
-                                </button>
+                                <Link to={'/createevent'}>
+                                    <button className="btn btn-success p-2" style={{width:'100%',background:'var(--button-color)'}}>
+                                        Registrate
+                                    </button>
+                                </Link>
                             </div>
                         </form>
                     </div>

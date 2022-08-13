@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import CreateEvent from "../pages/CreateEvent";
 // import {LoginView, RegisterView, MyProfile,MyEvent,CreateEvent, MainView, UserProfielView} from '../pages'
 // =======
+
 import {
   MainView,
   LoginView,
@@ -23,7 +24,7 @@ const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/main" element={<MainView />} />
+        <Route path="/" element={<MainView />} />
         <Route path="/user/:username" element={<UserProfielView />} />
         <Route path="/login" element={<LoginView />} />
         <Route path="/register" element={<RegisterView />} />
