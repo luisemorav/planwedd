@@ -26,7 +26,7 @@ const Profile = () => {
                                 <i class="fa-solid fa-message"></i>
                                 Enviar mensaje
                             </button>
-                            <Link className="container px-5" to={'/createevent'}>
+                            <Link className="container px-5" to={'/shoppingcart'}>
                                     <button className="btn btn-success p-2 d-flex justify-content-center gap-3" style={{width:'100%',background:'var(--button-color)'}}>
                                         <i class="fa-solid fa-gift"></i>
                                         Regalar
