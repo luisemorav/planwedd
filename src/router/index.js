@@ -6,6 +6,8 @@ import {
   MyEvent,
   Events,
   CreateEvent,
+  Search,
+  Shoppingcart,
 } from "../pages";
 
 const Router = () => {
@@ -18,6 +20,8 @@ const Router = () => {
         <Route path="/myevent" element={<MyEvent />} />
         <Route path="/events" element={<Events />} />
         <Route path="/createevent" element={<CreateEvent />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/shoppingcart" element={<Shoppingcart />} />
         <Route
           path="*"
           element={
