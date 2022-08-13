@@ -1,27 +1,21 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-<<<<<<< HEAD
-// import MyProfile from "../pages/MyProfile";
-// import MyEvent from "../pages/MyEvent";
-// import CreateEvent from "../pages/CreateEvent";
-import {LoginView, RegisterView, MyProfile,MyEvent,CreateEvent, MainView, UserProfielView} from '../pages'
-=======
 import {
   LoginView,
   RegisterView,
   MyProfile,
   MyEvent,
+  MainView,
+  UserProfielView,
   Events,
   CreateEvent,
   Search,
   Shoppingcart,
 } from "../pages";
->>>>>>> ccde0ab430b34ea1db7fbf867300fc84fb1ba549
-
 const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/main" element={<MainView />} />
+        <Route path="/" element={<MainView />} />
         <Route path="/user/:username" element={<UserProfielView />} />
         <Route path="/login" element={<LoginView />} />
         <Route path="/register" element={<RegisterView />} />
