@@ -6,7 +6,6 @@ const MyEvents = () => {
       <h2 className="h1 text-center mb-4 fw-semibold">Mis Eventos</h2>
       <div className="container">
         <CardEvent />
-        <CardEvent />
       </div>
     </div>
   );

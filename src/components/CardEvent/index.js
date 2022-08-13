@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 
 const CardEvent = () => {
+  let event = JSON.parse(localStorage.getItem("event")) || [];
+  console.log(event);
   return (
     <div className="row">
       <div

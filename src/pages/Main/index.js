@@ -45,7 +45,7 @@ const Main = () => {
                   className="d-flex align-items-end"
                   style={{ height: "50%" }}
                 >
-                  <i class="fa-solid fa-user escalable-font1"></i>
+                  <i className="fa-solid fa-user escalable-font1"></i>
                 </div>
                 <div style={{ height: "50%" }}>
                   <h5>Disfruta</h5>
@@ -60,7 +60,7 @@ const Main = () => {
                   className="d-flex align-items-end"
                   style={{ height: "50%" }}
                 >
-                  <i class="fa-solid fa-gift escalable-font1"></i>
+                  <i className="fa-solid fa-gift escalable-font1"></i>
                 </div>
                 <div style={{ height: "50%" }}>
                   <h5>Disfruta</h5>
@@ -75,7 +75,7 @@ const Main = () => {
                   className="d-flex align-items-end"
                   style={{ height: "50%" }}
                 >
-                  <i class="fa-solid fa-envelope escalable-font1"></i>
+                  <i className="fa-solid fa-envelope escalable-font1"></i>
                 </div>
                 <div style={{ height: "50%" }}>
                   <h5>Disfruta</h5>
@@ -90,7 +90,7 @@ const Main = () => {
                   className="d-flex align-items-end"
                   style={{ height: "50%" }}
                 >
-                  <i class="fa-solid fa-champagne-glasses escalable-font1"></i>
+                  <i className="fa-solid fa-champagne-glasses escalable-font1"></i>
                 </div>
                 <div style={{ height: "50%" }}>
                   <h5>Disfruta</h5>

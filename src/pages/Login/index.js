@@ -41,7 +41,7 @@ const Login = () => {
                 placeholder="Nombre de usuario o email"
               />
 
-              <div class="input-group mb-3">
+              <div className="input-group mb-3">
                 <input
                   type="text"
                   className="form-control p-3"
@@ -50,11 +50,11 @@ const Login = () => {
                   aria-describedby="button-addon2"
                 />
                 <button
-                  class="btn btn-outline-success"
+                  className="btn btn-outline-success"
                   type="button"
                   id="button-addon2"
                 >
-                  <i class="fa-solid fa-eye"></i>
+                  <i className="fa-solid fa-eye"></i>
                 </button>
               </div>
               <div className="d-grid">
