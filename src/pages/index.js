@@ -4,3 +4,5 @@ export { default as CreateEvent } from "./CreateEvent";
 // 
 export {default as LoginView} from './Login'
 export {default as RegisterView} from './Register'
+export {default as MainView} from './Main'
+export {default as ProfielView} from './Profile'

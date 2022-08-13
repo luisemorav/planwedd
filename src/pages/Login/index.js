@@ -15,14 +15,22 @@ const Login = ()=>{
                             className="form-control p-3" 
                             type="text" 
                             placeholder="nombre de usuario o email"
+                            style={{background:'transparent',border:'2px solid var(--button-color)'}}
                             />
 
                             <div class="input-group mb-3">
-                                <input type="text" className="form-control p-3" placeholder="repetir contrasenia" aria-label="Recipient's username" aria-describedby="button-addon2" />
-                                <button class="btn btn-outline-success" type="button" id="button-addon2"><i class="fa-solid fa-eye"></i></button>
+                                <input 
+                                type="text" 
+                                className="form-control p-3" 
+                                placeholder="contrasenia" 
+                                aria-label="Recipient's username" 
+                                aria-describedby="button-addon2"
+                                style={{background:'transparent',border:'2px solid var(--button-color)'}} 
+                                />
+                                <button class="btn btn-outline-success" type="button" id="button-addon2" style={{border:'2px solid var(--button-color)',color:'var(--button-color)'}}><i class="fa-solid fa-eye"></i></button>
                             </div>
                             <div className="d-grid">
-                                <button className="btn btn-outline-success p-2">
+                                <button className="btn btn-outline-success p-2" style={{border:'2px solid var(--button-color)',color:'var(--button-color)'}}>
                                     Iniciar sesion
                                 </button>
                             </div>
