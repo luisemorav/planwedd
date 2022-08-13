@@ -4,16 +4,19 @@ import {
   RegisterView,
   MyProfile,
   MyEvent,
+  MainView,
+  UserProfielView,
   Events,
   CreateEvent,
   Search,
   Shoppingcart,
 } from "../pages";
-
 const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<MainView />} />
+        <Route path="/user/:username" element={<UserProfielView />} />
         <Route path="/login" element={<LoginView />} />
         <Route path="/register" element={<RegisterView />} />
         <Route path="/myprofile" element={<MyProfile />} />
