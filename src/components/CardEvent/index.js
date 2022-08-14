@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
-// import { useState } from "react";
+import { useState } from "react";
 
 const CardEvent = () => {
-  // const event = JSON.parse(localStorage.getItem("event")) || {};
+  const event = JSON.parse(localStorage.getItem("evento")) || {};
+  console.log(event);
+  const [evento, setEvento] = useState(event)
 
   return (
     <div className="row">
@@ -13,9 +15,9 @@ const CardEvent = () => {
           backdropFilter: "blur(10px)",
         }}
       >
-        <p className="h5">Fecha del Evento: 16/08/2022 🎉</p>
+        <p className="h5">Fecha del Evento: {evento.FechaEvento} 🎉</p>
         <div className="row justify-content-between px-3">
-          <p className="h2 col-6">Paco y Lulu</p>
+          <p className="h2 col-6">{evento.NombreEvento}</p>
           <Link to={"/user/:username"} className="btn btn-first col-2">
             Ir al evento
           </Link>
