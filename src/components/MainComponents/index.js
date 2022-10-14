@@ -1,0 +1,5 @@
+export {default as ButtonLinkView} from './ButtonLink'
+export {default as NavBarView} from './NavBar'
+export {default as InputSearchView} from './InputSearch'
+export {default as StepsCardsView} from './StepsCards'
+export {default as FooterCardView} from './FooterCard'
