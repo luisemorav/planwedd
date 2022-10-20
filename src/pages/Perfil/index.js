@@ -1,9 +1,11 @@
-
+// import { useState } from "react";
 import styled from "styled-components";
+// import GiftList from "../GiftList";
 const Container = styled.div`
     width: 100%;
     min-height: 100vh;
     height: 100vh;
+    position: relative;
 `
 const ContainerBanner = styled.div`
     width: 100%;
@@ -13,11 +15,12 @@ const ContainerBanner = styled.div`
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
-    `
+`
 const ContainerDescription = styled.div`
     width: 100%;
-    height: 65%;
-    border-top: 2px solid #C6C6C8;
+    height: calc(100% - 35%);
+    /* padding-top: 30px; */
+    /* border-top: 2px solid #C6C6C8; */
     border-bottom: 2px solid #C6C6C8;
     display: flex;
     flex-direction: column;
@@ -26,7 +29,6 @@ const ContainerDescription = styled.div`
 `
 const ContainerTitle = styled.div`
     width: 100%;
-    padding: 0 0 50px;
     text-transform: capitalize;
     display: flex;
     justify-content: center;
@@ -145,6 +147,18 @@ const CardTime = styled.div`
     color: rgba(0,0,0,0.3);
     text-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
 `
+const TitlesContainer = styled.div`
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    @media (max-width:1500px) {
+        width: 80%;
+    }
+`
+
+
+
 const Perfil = ()=>{
     return(
         <Container>
@@ -152,10 +166,10 @@ const Perfil = ()=>{
             </ContainerBanner>
             <ContainerDescription>
                 <ContainerTitle>
-                    <div style={{width:"50%", display:"flex",flexDirection:"column",alignItems:"center",gap:"20px"}} >
+                    <TitlesContainer >
                         <Title>pedro y angela</Title>
                         <SubTitle>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam explicabo ab tempore quos tempora cumque, sed eligendi libero quae nesciunt deserunt dolorum voluptatem assumenda ducimus deleniti odit rem quis culpa?</SubTitle>
-                    </div>
+                    </TitlesContainer>
                 </ContainerTitle>
                 <ContainerInformation>
                     <Information>
@@ -204,7 +218,8 @@ const Perfil = ()=>{
                     </Cards>
                 </CardContainer>
             </ContainerDedicatorias>
-
+            {/* other interactions */}
+            {/* <GiftList status={showListGifts}  hideGifts={hideGifts}></GiftList> */}
         </Container>
     )
 }

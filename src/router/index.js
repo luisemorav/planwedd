@@ -40,7 +40,7 @@
 
 // export default Router;
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import {MainView, RegisterView, LoginView, PerfilView} from '../pages/'
+import {MainView, RegisterView, LoginView, PerfilView, GiftListView,CreateEventView, CreateGiftListView} from '../pages/'
 
 const Router = ()=>{
     return(
@@ -50,7 +50,9 @@ const Router = ()=>{
                 <Route path="/register" element={<RegisterView />} />
                 <Route path="/login" element={<LoginView />} />
                 <Route path="/perfil" element={<PerfilView />} />
-                {/* <Route path="/createEvent" element={<CreateEventView />} /> */}
+                <Route path="/gifts" element={<GiftListView />} />
+                <Route path="/createEvent" element={<CreateEventView />} />
+                <Route path="/createGift" element={<CreateGiftListView />} />
             </Routes>
         </BrowserRouter>
     )

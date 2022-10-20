@@ -121,6 +121,10 @@ const Register = ()=>{
                     <InputForm></InputForm>
                 </ContainerInput>
                 <ContainerInput>
+                    <InputTitle>DNI</InputTitle>
+                    <InputForm></InputForm>
+                </ContainerInput>
+                <ContainerInput>
                     <InputTitle>Correo electronico</InputTitle>
                     <InputForm></InputForm>
                 </ContainerInput>
