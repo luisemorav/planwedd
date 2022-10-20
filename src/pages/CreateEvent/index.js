@@ -32,6 +32,13 @@ const CreateEvent = ()=> {
                 <div className="_padTop10 col-lg-4 col-md-4 col-sm-12 col-xs-12">
                     <label htmlFor="portada" className="form-label">Agregar foto de portada</label>
                     <input className="form-control form-control-sm" id="portada" type="file"></input>
+
+                    {/* Gonzalo, borra esto si es que lo puedes mejorar */}
+                    <label htmlFor='color1' className=''>Color 1</label>
+                    <input type="color" id="color1"/>
+                    <label htmlFor='color2'>Color 2</label>
+                    <input type="color" id="color2"/>
+                    {/* -------------------------------------------------- */}
                 </div>
 
                 <div className="_padTop10 col-lg-4 col-md-4 col-sm-12 col-xs-12">
