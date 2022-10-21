@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import styled from 'styled-components'
 import { Link, useNavigate } from 'react-router-dom'
-
+import petitions from '../../../api'
 
 const Container = styled.div`
     /* width: 100%; */
@@ -32,17 +32,41 @@ const InputSelect = styled.input`
         cursor: text;
     }
     `
-const InputSearch = ()=>{
-    const navigate = useNavigate()
+const InputSearch = ({saveInputValue,inputSearchValue})=>{
+
+    // const navigate = useNavigate()
     const [searchValue, setSearchValue] = useState('')
     function handleSearch (e){
-        setSearchValue(e.target.value)
+        setSearchValue(e.target.value.toLowerCase())
+    }
+    async function searchEvent(identificador){
+        try {
+            console.log(searchValue)
+            const response = await petitions.getEvents()
+            const results = response.results
+            let array = []
+            results.forEach(e => {
+                // console.log(e.nombre_evento.toLowerCase())
+                // console.log(identificador.toLowerCase())
+                if(e.nombre_evento.toLowerCase().includes(identificador)){
+                    array.push(e)
+                    return
+                }
+            });
+            saveInputValue(array)
+            
+        } catch (error) {
+            
+        }
     }
     function searchContent(e){
         if(e.key === 'Enter'){
-            navigate('/' + searchValue)
+            searchEvent(searchValue)
             return
         }
+    }
+    function searchContentByIcon(){
+        searchEvent(searchValue)
     }
     return(
             <Container>
@@ -51,14 +75,14 @@ const InputSearch = ()=>{
                 onKeyDown={searchContent}
                 onChange={handleSearch}
                 />
-                <Link to={'/' + searchValue}>
-                    <i className="fa-solid fa-magnifying-glass" 
-                    style={{
-                        cursor:"pointer",
-                        textDecoration:"none",
-                        color:"black"
-                        }}></i>
-                </Link>
+                <i 
+                onClick={searchContentByIcon}
+                className="fa-solid fa-magnifying-glass" 
+                style={{
+                    cursor:"pointer",
+                    textDecoration:"none",
+                    color:"black"
+                }}></i>
             </Container>
     )
 }

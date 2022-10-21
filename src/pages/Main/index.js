@@ -1,3 +1,6 @@
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+// import petitions from '../../api/index'
 import {NavBarView, 
     InputSearchView,
     StepsCardsView,
@@ -44,21 +47,25 @@ margin: 20px 0;
 display: flex;
 gap: 10px;
 `
-//! mejorar en el futuro =>
+//! mejorar en el futuro => 
 const ContainerSearch = styled.div`
-width: 100%;
-height: 70vh;
-display: flex;
-justify-content: center;
-align-items: center;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 200px 0;
+    gap: 20px;
 `
-const ContainerSearInput = styled.div`
+const ContainerSearchInput = styled.div`
 min-width:350px;
 width:700px;
 display: flex;
 flex-direction: column;
 gap: 10px;
 `
+
+
 const ContainerSteps = styled.div`
 width: 100%;
 `
@@ -83,7 +90,68 @@ text-shadow:0 2px 4px rgba(60, 60, 67, 0.6);
 color: rgba(60, 60, 67, 0.8);
 `
 
+// ! card Fetchs 
+//? input search results
+const ContainerSearchResult = styled.div`
+    width: 700px;
+    background-color: white;
+    border: 2px solid #c6c6c8;
+    border-radius: 10px;
+    overflow: auto;
+    padding: 30px;
+    display: grid;
+    gap: 20px;
+    cursor: pointer;
+`
+const CardEvents = styled.div`
+    background-color: white;
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.10);
+    display: flex;
+    width: 100%;
+    height: 150px;
+    border-radius: 5px;
+`
+const EventsCardLeft = styled.div`
+    width: 50%;
+    /* background-color: red; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* align-items: center; */
+    padding: 20px;
+    `
+const EventsCardRight = styled.div`
+    width: 50%;
+    /* background-color: green; */
+    img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 0 10px 10px 0;
+    }
+`
+
+const EventsTitle = styled.p`
+    font-size: 1.3rem;
+    font-weight: 500;
+    line-height: 20px;
+`
+const EventsFecha = styled.p`
+
+`
+// !-------------------------
 const Main = ()=>{
+    const [inputSearchValue, setInputSearchValue] = useState('')
+
+    function saveInputValue(value){
+        setInputSearchValue(value)
+        showEvents()
+    }
+    function showEvents(){
+        console.log(inputSearchValue)
+    }
+
+
 return(
   <Container>
       <NavBarView />
@@ -114,10 +182,34 @@ return(
       <Separator />
 
       <ContainerSearch>
-          <ContainerSearInput>
+          <ContainerSearchInput>
               <InputTitle>Buscar evento</InputTitle>
-              <InputSearchView></InputSearchView>
-          </ContainerSearInput>
+              <InputSearchView saveInputValue={saveInputValue} inputSearchValue={inputSearchValue} ></InputSearchView>
+          </ContainerSearchInput>
+
+        {/* Input Result Search */}
+          <ContainerSearchResult>
+            {
+            inputSearchValue ?
+            inputSearchValue.map((element,index)=>(
+                <Link key={index} to={"/user/" + element.usuario_id} style={{textDecoration:"none",color:"rgba(0,0,0,0.8)"}}>
+                    <CardEvents id_event={element.id}>
+
+                        <EventsCardLeft>
+                            <EventsTitle>{element.nombre_evento}</EventsTitle>
+                            <EventsFecha>fecha de evento: {element.fecha_evento}</EventsFecha>
+                        </EventsCardLeft>
+                        <EventsCardRight>
+                            <img src={element.img_portada} alt="foto de portada"></img>
+                        </EventsCardRight>
+
+                    </CardEvents>
+                </Link>
+            ))
+            : <h1>no hay nada</h1>
+            }
+          </ContainerSearchResult>
+        {/* ------------------ */}
       </ContainerSearch>
 
       {/* body  --------------------------*/}

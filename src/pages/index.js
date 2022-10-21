@@ -11,7 +11,7 @@
 export {default as MainView} from './Main'
 export {default as RegisterView} from './Register'
 export {default as LoginView} from './Login'
-export {default as PerfilView} from './Perfil'
+export {default as UserView} from './User'
 export {default as GiftListView} from './GiftList'
 export {default as CreateEventView} from './CreateEvent'
 export {default as CreateGiftListView} from './CreateGiftList'
