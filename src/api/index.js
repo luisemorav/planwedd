@@ -1,4 +1,5 @@
 import URL from './config'
+
 async function getEvents(){
     const response = await fetch(URL + "/events", {
         method: "GET",
@@ -8,9 +9,37 @@ async function getEvents(){
     const data = await response.json()
     return data
 }
+async function getEventByIdUser(id){
+    let config = {
+        method: "GET",
+        headers: {
+            accept: "application/json",
+        },
+    };
+    let res = await fetch(
+        `${URL}/events${id["id"]}`,
+        config
+    );
+    return res
+}
+async function getDedicatoriasByEventID(id){
+    let config = {
+        method: "GET",
+        headers: {
+            accept: "application/json",
+        },
+    };
+    let res = await fetch(
+        `${URL}/dedications/event${id}`,
+        config
+    )
+    return res
+}
 
 const petitions = {
     getEvents,
+    getEventByIdUser,
+    getDedicatoriasByEventID
 }
 
 export default petitions

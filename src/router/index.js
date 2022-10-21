@@ -44,7 +44,7 @@ import {
     MainView, 
     RegisterView, 
     LoginView, 
-    UserView, 
+    EventView, 
     GiftListView,
     CreateEventView, 
     CreateGiftListView
@@ -57,7 +57,7 @@ const Router = ()=>{
                 <Route path="/" element={<MainView />} />
                 <Route path="/register" element={<RegisterView />} />
                 <Route path="/login" element={<LoginView />} />
-                <Route path="/user/:id" element={<UserView />} />
+                <Route path="/event/:id" element={<EventView />} />
                 <Route path="/gifts" element={<GiftListView />} />
                 <Route path="/createEvent" element={<CreateEventView />} />
                 <Route path="/createGift" element={<CreateGiftListView />} />

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import styled from 'styled-components'
-import { Link, useNavigate } from 'react-router-dom'
+// import { Link, useNavigate } from 'react-router-dom'
 import petitions from '../../../api'
 
 const Container = styled.div`
@@ -33,21 +33,16 @@ const InputSelect = styled.input`
     }
     `
 const InputSearch = ({saveInputValue,inputSearchValue})=>{
-
-    // const navigate = useNavigate()
     const [searchValue, setSearchValue] = useState('')
     function handleSearch (e){
         setSearchValue(e.target.value.toLowerCase())
     }
     async function searchEvent(identificador){
         try {
-            console.log(searchValue)
             const response = await petitions.getEvents()
             const results = response.results
             let array = []
             results.forEach(e => {
-                // console.log(e.nombre_evento.toLowerCase())
-                // console.log(identificador.toLowerCase())
                 if(e.nombre_evento.toLowerCase().includes(identificador)){
                     array.push(e)
                     return

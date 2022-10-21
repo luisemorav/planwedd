@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 // import petitions from '../../api/index'
 import {NavBarView, 
@@ -145,11 +145,11 @@ const Main = ()=>{
 
     function saveInputValue(value){
         setInputSearchValue(value)
-        showEvents()
+        // showEvents()
     }
-    function showEvents(){
-        console.log(inputSearchValue)
-    }
+    // function showEvents(){
+    //     console.log(inputSearchValue)
+    // }
 
 
 return(
@@ -190,9 +190,9 @@ return(
         {/* Input Result Search */}
           <ContainerSearchResult>
             {
-            inputSearchValue ?
+            inputSearchValue &&
             inputSearchValue.map((element,index)=>(
-                <Link key={index} to={"/user/" + element.usuario_id} style={{textDecoration:"none",color:"rgba(0,0,0,0.8)"}}>
+                <Link key={index} to={"/event/" + element.usuario_id} style={{textDecoration:"none",color:"rgba(0,0,0,0.8)"}}>
                     <CardEvents id_event={element.id}>
 
                         <EventsCardLeft>
@@ -206,7 +206,6 @@ return(
                     </CardEvents>
                 </Link>
             ))
-            : <h1>no hay nada</h1>
             }
           </ContainerSearchResult>
         {/* ------------------ */}

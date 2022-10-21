@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
+import petitions from "../../api";
 
 const Container = styled.div`
 	width: 100%;
@@ -19,6 +20,8 @@ const ContainerBanner = styled.div`
 const ContainerDescription = styled.div`
 	width: 100%;
 	height: calc(100% - 35%);
+	/* padding-top: 30px; */
+	/* border-top: 2px solid #C6C6C8; */
 	border-bottom: 2px solid #c6c6c8;
 	display: flex;
 	flex-direction: column;
@@ -155,68 +158,50 @@ const TitlesContainer = styled.div`
 	}
 `;
 
-const User = () => {
+const Event = () => {
 	let id = useParams();
-	// console.log(id['id'])
 
 	const [event, setEvent] = useState([]);
-	const [dedications, setDedications] = useState([]);
+	const [dedications, setDedications] = useState('');
 
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		cargarEvento();
 	}, []);
-
 	const cargarEvento = async () => {
 		try {
-			let config = {
-				method: "GET",
-				headers: {
-					accept: "application/json",
-				},
-			};
-			let res = await fetch(
-				`http://127.0.0.1:5000/events${id["id"]}`,
-				config
-			);
+			const res = await petitions.getEventByIdUser(id)
+			console.log(res)
 			let eventData = await res.json();
 			if (res.status === 200) {
-				// console.log(eventData['data'][0])
-				setEvent(eventData["data"][0]);
+				setEvent(eventData.data[0]);
+				const eventId = eventData.data[0].id
+				cargarDedicatorias(eventId)
+				return
+				
 			} else if (res.status === 404) {
 				console.log(eventData["message"]);
 				navigate("/404");
-			}
+			} 
 		} catch (error) {
+			navigate("/404");
 			console.log(error);
 		}
 	};
 
-    // Falta lograr que la funcion cargarDedicatorias() se ejecute
-    // una vez se tenga el evento id a partir de la funcion cargarEvento()
-    // al ser una funcion asíncrona se debe esperar que extraiga los datos
-    // sin embargo no se como
 
-	const cargarDedicatorias = async () => {
+	const cargarDedicatorias = async (idEvent) => {
 		try {
-			// console.log(event)
-			let config = {
-				method: "GET",
-				headers: {
-					accept: "application/json",
-				},
-			};
-			let res = await fetch(
-				`http://127.0.0.1:5000/dedications/event${event["id"]}`,
-				config
-			);
+			
+			const res = await petitions.getDedicatoriasByEventID(idEvent)
 			let dedicatoriasRaw = await res.json();
 			if (res.status === 200) {
 				let dedicatorias = dedicatoriasRaw["data"];
 				setDedications(dedicatorias);
-			} else {
-				setDedications([]);
+				return
+			} else if (res.status === 404) {
+				setDedications("");
 			}
 		} catch (error) {
 			console.log(error);
@@ -245,8 +230,7 @@ const User = () => {
 						</SubTitle>
 						<TitleMini>Fecha</TitleMini>
 						<SubTitle>
-							Av 22 de Julio Mz T Lt 24 - Asoc Fortaleza de
-							Vitarte
+							{event.fecha_evento}
 						</SubTitle>
 						<TitleMini>Comprometidos</TitleMini>
 						<UlContainer>
@@ -266,11 +250,15 @@ const User = () => {
 			</ContainerDescription>
 			<ContainerDedicatorias>
 				<CardContainer>
+					{dedications ? 
 					<TitleMini>Dedicatorias</TitleMini>
+					: <TitleMini>No se encontraron dedicatorias</TitleMini>
+					}
 					<Cards>
-						{dedications.map((dedication) => {
+						{dedications &&
+						dedications.map((dedication, index) => {
 							return (
-								<Card>
+								<Card key={index}>
 									<CardTitle>{dedication.nombre}</CardTitle>
 									<CardSubtitle>
 										{dedication.contenido}
@@ -278,7 +266,8 @@ const User = () => {
 									<CardTime>09/10/2022</CardTime>
 								</Card>
 							);
-						})}
+						})
+						} 
 					</Cards>
 				</CardContainer>
 			</ContainerDedicatorias>
@@ -288,4 +277,4 @@ const User = () => {
 	);
 };
 
-export default User;
+export default Event;
