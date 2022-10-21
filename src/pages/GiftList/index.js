@@ -1,7 +1,8 @@
-import { useState } from "react";
-import GiftPayModal from '../../components/GiftPayModal'
 import styled from "styled-components";
-
+import GiftPayModal from '../../components/GiftPayModal'
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import petitions from "../../api";
 const AllContainer = styled.div`
     width: 100%;
     height: 100vh;
@@ -27,10 +28,8 @@ const ContainerGifts = styled.div`
 const ContainerBanner = styled.div`
     width: 100%;
     height: 35%;
-    background-color: pink;
-    background: url('https://images.pexels.com/photos/2879822/pexels-photo-2879822.jpeg');
+    background-color: white;
     background-size: cover;
-    background-position: center center;
     background-repeat: no-repeat;
 `
 // mini components =>
@@ -74,6 +73,7 @@ const DescriptionCard = styled.div`
     justify-content: space-between;
 `
 const TitleCard1 = styled.h3`
+    text-transform: capitalize;
     font-size: 1.3rem;
     font-weight: 600;
     text-shadow: 0px 2px 6px rgba(0 ,0 ,0, 0.25);
@@ -108,111 +108,73 @@ const ButtonPrice = styled.div`
 `
 
 const GiftList = ()=>{
+    const [background, setBackground] = useState("")
+    const [modalData, setModalData] = useState("")
+    const [giftsList, setGiftsList] = useState("")
+
+    const {id,userId} = useParams()
+
+    async function getGifts(){
+        const res = await petitions.getGiftsByEventId(id) 
+        const {data} = await res.json()
+        if(res.status === 200){
+            console.log(userId)
+            setGiftsList(data)
+            
+            return
+        }
+    }
+    async function getBackground(){
+        console.log(userId)
+        const res = await petitions.getEventByIdUser(userId)
+        const {data} = await res.json()
+        if(res.status === 200){
+            setBackground(data[0].img_portada)
+        }
+    }
+
+
     const [showGiftModal, SetShowGiftModal] = useState("none")
-    function showModal(){
+    function showModal(id){
+        giftsList.forEach(element => {
+            if(element.id === id){
+                setModalData(element)
+            }
+        });
         SetShowGiftModal("grid")
     }
     function hiddenGiftModal(){
         SetShowGiftModal("none")
     }
+    useEffect(()=>{
+        getGifts()
+        getBackground()
+    },[])
     return(
         <AllContainer>
-            <GiftPayModal showGiftModal={showGiftModal} hiddenGiftModal={hiddenGiftModal}></GiftPayModal>
-            <ContainerBanner />
+            <GiftPayModal showGiftModal={showGiftModal} hiddenGiftModal={hiddenGiftModal} modalData={modalData}></GiftPayModal>
+            <ContainerBanner style={{backgroundImage:`url('${background}')`}} />
 
             <Container>
                 <Title1>Lista de regalos</Title1>
                 <ContainerGifts>
-                    <CardGift>
-                        <PhotoCard><img src="https://home.ripley.com.pe/Attachment/WOP_5/2064260010252/2064260010252_2.jpg" alt="" /></PhotoCard>
-                        <DescriptionCard>
-                            <TitleCard1>Mueble verde reforzado.</TitleCard1>
-                            <ButtonsCard>
-                                <ButtonPrice>s/100</ButtonPrice>
-                                <ButtonCard onClick={showModal}>regalar</ButtonCard>
-                            </ButtonsCard>
-                        </DescriptionCard>
-                    </CardGift>
-                    <CardGift>
-                        <PhotoCard><img src="https://http2.mlstatic.com/D_NQ_NP_810141-MPE49141021704_022022-O.jpg" alt="" /></PhotoCard>
-                        <DescriptionCard>
-                            <TitleCard1>Sillon XL color Gris.</TitleCard1>
-                            <ButtonsCard>
-                                <ButtonPrice>s/200</ButtonPrice>
-                                <ButtonCard onClick={showModal}>regalar</ButtonCard>
-                            </ButtonsCard>
-                        </DescriptionCard>
-                    </CardGift>
-                    <CardGift>
-                        <PhotoCard><img src="https://www.estilos.com.pe/121003-large_default/familia-set-de-cubiertos-48-pz-acero-inox-xy-001c.jpg" alt="" /></PhotoCard>
-                        <DescriptionCard>
-                            <TitleCard1>Cubiertos de metal.</TitleCard1>
-                            <ButtonsCard>
-                                <ButtonPrice>s/50</ButtonPrice>
-                                <ButtonCard onClick={showModal}>regalar</ButtonCard>
-                            </ButtonsCard>
-                        </DescriptionCard>
-                    </CardGift>
-                    <CardGift>
-                        <PhotoCard><img src="https://www.estilos.com.pe/121003-large_default/familia-set-de-cubiertos-48-pz-acero-inox-xy-001c.jpg" alt="" /></PhotoCard>
-                        <DescriptionCard>
-                            <TitleCard1>Cubiertos de metal.</TitleCard1>
-                            <ButtonsCard>
-                                <ButtonPrice>s/50</ButtonPrice>
-                                <ButtonCard onClick={showModal}>regalar</ButtonCard>
-                            </ButtonsCard>
-                        </DescriptionCard>
-                    </CardGift>
-                    <CardGift>
-                        <PhotoCard><img src="https://www.estilos.com.pe/121003-large_default/familia-set-de-cubiertos-48-pz-acero-inox-xy-001c.jpg" alt="" /></PhotoCard>
-                        <DescriptionCard>
-                            <TitleCard1>Cubiertos de metal.</TitleCard1>
-                            <ButtonsCard>
-                                <ButtonPrice>s/50</ButtonPrice>
-                                <ButtonCard onClick={showModal}>regalar</ButtonCard>
-                            </ButtonsCard>
-                        </DescriptionCard>
-                    </CardGift>
-                    <CardGift>
-                        <PhotoCard><img src="https://www.estilos.com.pe/121003-large_default/familia-set-de-cubiertos-48-pz-acero-inox-xy-001c.jpg" alt="" /></PhotoCard>
-                        <DescriptionCard>
-                            <TitleCard1>Cubiertos de metal.</TitleCard1>
-                            <ButtonsCard>
-                                <ButtonPrice>s/50</ButtonPrice>
-                                <ButtonCard onClick={showModal}>regalar</ButtonCard>
-                            </ButtonsCard>
-                        </DescriptionCard>
-                    </CardGift>
-                    <CardGift>
-                        <PhotoCard><img src="https://www.estilos.com.pe/121003-large_default/familia-set-de-cubiertos-48-pz-acero-inox-xy-001c.jpg" alt="" /></PhotoCard>
-                        <DescriptionCard>
-                            <TitleCard1>Cubiertos de metal.</TitleCard1>
-                            <ButtonsCard>
-                                <ButtonPrice>s/50</ButtonPrice>
-                                <ButtonCard onClick={showModal}>regalar</ButtonCard>
-                            </ButtonsCard>
-                        </DescriptionCard>
-                    </CardGift>
-                    <CardGift>
-                        <PhotoCard><img src="https://www.estilos.com.pe/121003-large_default/familia-set-de-cubiertos-48-pz-acero-inox-xy-001c.jpg" alt="" /></PhotoCard>
-                        <DescriptionCard>
-                            <TitleCard1>Cubiertos de metal.</TitleCard1>
-                            <ButtonsCard>
-                                <ButtonPrice>s/50</ButtonPrice>
-                                <ButtonCard onClick={showModal}>regalar</ButtonCard>
-                            </ButtonsCard>
-                        </DescriptionCard>
-                    </CardGift>
-                    <CardGift>
-                        <PhotoCard><img src="https://www.estilos.com.pe/121003-large_default/familia-set-de-cubiertos-48-pz-acero-inox-xy-001c.jpg" alt="" /></PhotoCard>
-                        <DescriptionCard>
-                            <TitleCard1>Cubiertos de metal.</TitleCard1>
-                            <ButtonsCard>
-                                <ButtonPrice>s/50</ButtonPrice>
-                                <ButtonCard onClick={showModal}>regalar</ButtonCard>
-                            </ButtonsCard>
-                        </DescriptionCard>
-                    </CardGift>
+                    {
+                        giftsList &&
+                        giftsList.map((e,i)=>{
+                            return(
+                                <CardGift key={i} >
+                                    <PhotoCard><img src={e.img_regalo} alt={e.description} /></PhotoCard>
+                                    <DescriptionCard>
+                                        <TitleCard1>{e.nombre}</TitleCard1>
+                                        <ButtonsCard>
+                                            <ButtonPrice>s/{e.precio}</ButtonPrice>
+                                            <ButtonCard onClick={()=>showModal(e.id)}>regalar</ButtonCard>
+                                        </ButtonsCard>
+                                    </DescriptionCard>
+                                </CardGift>
+                            )
+                        })
+                    }
                 </ContainerGifts>
             </Container>
         </AllContainer>

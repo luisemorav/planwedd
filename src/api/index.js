@@ -17,7 +17,7 @@ async function getEventByIdUser(id){
         },
     };
     let res = await fetch(
-        `${URL}/events${id["id"]}`,
+        `${URL}/events${id}`,
         config
     );
     return res
@@ -36,10 +36,24 @@ async function getDedicatoriasByEventID(id){
     return res
 }
 
+
+// ? GIFTS PETITIONS 
+async function getGiftsByEventId(id){
+    const configuration = {
+        method:"GET",
+        headers:{
+            accept: "application/json",
+        },
+    }
+    const res = await fetch(`${URL}/gifts/event${id}`, configuration)
+    return res
+}
+
 const petitions = {
     getEvents,
     getEventByIdUser,
-    getDedicatoriasByEventID
+    getDedicatoriasByEventID,
+    getGiftsByEventId
 }
 
 export default petitions

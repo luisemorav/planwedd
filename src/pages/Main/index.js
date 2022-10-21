@@ -145,6 +145,9 @@ const Main = ()=>{
 
     function saveInputValue(value){
         setInputSearchValue(value)
+        inputSearchValue.forEach(element => {
+            console.log(element.id)
+        });
         // showEvents()
     }
     // function showEvents(){

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import styled from "styled-components";
 const Container = styled.div`
     width: 100%;
@@ -63,8 +64,15 @@ const FormContainer = styled.div`
 
 // mini components
 const TitleGift = styled.h3`
+    text-transform: capitalize;
     font-size: 2rem;
     font-weight: 600;
+    /* text-align: center; */
+
+`
+const TitleGift2 = styled.h3`
+    font-size: 1.5rem;
+    font-weight: 400;
     /* text-align: center; */
 
 `
@@ -127,7 +135,7 @@ const ExitButton = styled.button`
         color: #f4f4f4;
     }
 `
-const GiftPayModal = ({showGiftModal, hiddenGiftModal})=>{
+const GiftPayModal = ({showGiftModal, hiddenGiftModal,modalData})=>{
     return(
         <Container style={{display:showGiftModal}}>
             <Card>
@@ -135,8 +143,9 @@ const GiftPayModal = ({showGiftModal, hiddenGiftModal})=>{
                     <i className="fa-solid fa-xmark"></i>
                 </ExitButton>
                 <PhotoContainer>
-                    <TitleGift>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates expedita ad unde. Similique quis consequatur velit.</TitleGift>
-                    <img src="https://home.ripley.com.pe/Attachment/WOP_5/2064260010252/2064260010252_2.jpg" alt="" />
+                    <TitleGift>{modalData.nombre}</TitleGift>
+                    <TitleGift2>s/{modalData.precio}</TitleGift2>
+                    <img src={modalData.img_regalo} alt="" />
                 </PhotoContainer>
                 <FormContainer>
                     <TitleForm>Pasarela de pago</TitleForm>

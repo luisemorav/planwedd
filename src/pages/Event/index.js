@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import petitions from "../../api";
@@ -14,7 +15,6 @@ const ContainerBanner = styled.div`
 	height: 35%;
 	background-color: pink;
 	background-size: cover;
-	background-position: center center;
 	background-repeat: no-repeat;
 `;
 const ContainerDescription = styled.div`
@@ -159,7 +159,7 @@ const TitlesContainer = styled.div`
 `;
 
 const Event = () => {
-	let id = useParams();
+	let {id} = useParams();
 
 	const [event, setEvent] = useState([]);
 	const [dedications, setDedications] = useState('');
@@ -212,7 +212,7 @@ const Event = () => {
 		<Container>
 			<ContainerBanner
 				style={{
-					background: `url(${event.img_portada})`,
+					backgroundImage: `url(${event.img_portada})`,
 				}}></ContainerBanner>
 			<ContainerDescription>
 				<ContainerTitle>
@@ -239,12 +239,14 @@ const Event = () => {
 						</UlContainer>
 					</Information>
 					<Buttons>
-						<Button>
-							<i
-								style={{ fontSize: "4rem" }}
-								className="fa-solid fa-gift"></i>
-							<SubTitle>Dejar Regalo</SubTitle>
-						</Button>
+						<Link to={`/event/${event.usuario_id}/gifts/` + event.id}>
+							<Button>
+								<i
+									style={{ fontSize: "4rem" }}
+									className="fa-solid fa-gift"></i>
+								<SubTitle>Dejar Regalo</SubTitle>
+							</Button>
+						</Link>
 					</Buttons>
 				</ContainerInformation>
 			</ContainerDescription>

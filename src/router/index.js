@@ -58,7 +58,7 @@ const Router = ()=>{
                 <Route path="/register" element={<RegisterView />} />
                 <Route path="/login" element={<LoginView />} />
                 <Route path="/event/:id" element={<EventView />} />
-                <Route path="/gifts" element={<GiftListView />} />
+                <Route path="/event/:userId/gifts/:id" element={<GiftListView />} />
                 <Route path="/createEvent" element={<CreateEventView />} />
                 <Route path="/createGift" element={<CreateGiftListView />} />
                 <Route
