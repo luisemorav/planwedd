@@ -21,7 +21,7 @@ const Main = () => {
                   textShadow: "0 0 20px black",
                 }}
               >
-                PLANWEED
+                PLANWEDD
               </h1>
               <span className="h2 mb-5" style={{color: "#fff", textShadow: "0 0 6px black"}}>Tu boda con los regalos que realmente quieres!</span>
               <Link to={"/register"}>
