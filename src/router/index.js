@@ -1,41 +1,76 @@
+// import { BrowserRouter, Routes, Route } from "react-router-dom";
+// import {
+//   LoginView,
+//   RegisterView,
+//   MyProfile,
+//   MyEvent,
+//   MainView,
+//   UserProfielView,
+//   Events,
+//   CreateEvent,
+//   Search,
+//   Shoppingcart,
+// } from "../pages";
+// const Router = () => {
+//   return (
+//     <BrowserRouter>
+//       <Routes>
+//         <Route path="/" element={<MainView />} />
+//         <Route path="/user/:username" element={<UserProfielView />} />
+//         <Route path="/login" element={<LoginView />} />
+//         <Route path="/register" element={<RegisterView />} />
+//         <Route path="/myprofile" element={<MyProfile />} />
+//         <Route path="/myevent" element={<MyEvent />} />
+//         <Route path="/events" element={<Events />} />
+//         <Route path="/createevent" element={<CreateEvent />} />
+//         <Route path="/search" element={<Search />} />
+//         <Route path="/shoppingcart" element={<Shoppingcart />} />
+//         <Route
+//           path="*"
+//           element={
+//             <main style={{ padding: "1rem" }}>
+//               <p>Esta página no existe</p>
+//             </main>
+//           }
+//         />
+//       </Routes>
+//     </BrowserRouter>
+//   );
+// };
+
+// export default Router;
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {
-  LoginView,
-  RegisterView,
-  MyProfile,
-  MyEvent,
-  MainView,
-  UserProfielView,
-  Events,
-  CreateEvent,
-  Search,
-  Shoppingcart,
-} from "../pages";
-const Router = () => {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<MainView />} />
-        <Route path="/user/:username" element={<UserProfielView />} />
-        <Route path="/login" element={<LoginView />} />
-        <Route path="/register" element={<RegisterView />} />
-        <Route path="/myprofile" element={<MyProfile />} />
-        <Route path="/myevent" element={<MyEvent />} />
-        <Route path="/events" element={<Events />} />
-        <Route path="/createevent" element={<CreateEvent />} />
-        <Route path="/search" element={<Search />} />
-        <Route path="/shoppingcart" element={<Shoppingcart />} />
-        <Route
-          path="*"
-          element={
-            <main style={{ padding: "1rem" }}>
-              <p>Esta página no existe</p>
-            </main>
-          }
-        />
-      </Routes>
-    </BrowserRouter>
-  );
-};
+    MainView, 
+    RegisterView, 
+    LoginView, 
+    EventView, 
+    GiftListView,
+    CreateEventView, 
+    CreateGiftListView
+} from '../pages/'
 
-export default Router;
+const Router = ()=>{
+    return(
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<MainView />} />
+                <Route path="/register" element={<RegisterView />} />
+                <Route path="/login" element={<LoginView />} />
+                <Route path="/event/:id" element={<EventView />} />
+                <Route path="/event/:userId/gifts/:id" element={<GiftListView />} />
+                <Route path="/createEvent" element={<CreateEventView />} />
+                <Route path="/createGift" element={<CreateGiftListView />} />
+                <Route
+					path="*"
+					element={
+						<main style={{ padding: "1rem" }}>
+							<p>Esta página no existe</p>
+						</main>
+					}
+				/>
+            </Routes>
+        </BrowserRouter>
+    )
+}
+export default Router

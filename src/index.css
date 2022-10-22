@@ -1,8 +1,7 @@
 :root {
   /* Fonts */
-  --title-font: "Raleway", sans-serif;
-  --paragraph-font: "Edu VIC WA NT Beginner", cursive;
-
+  --title-font: 'Sarabun', sans-serif;
+  --paragraph-font: 'Sarabun', sans-serif;
   /* Colors */
   --background-color: #ffffff;
   --button-color: #007d89;
@@ -129,3 +128,13 @@ body {
     font-size: 2em;
   }
 }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    display: none; 
+    /* -webkit-appearance: none; */
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+/* input[type=number] {
+    -moz-appearance:textfield; 
+} */
