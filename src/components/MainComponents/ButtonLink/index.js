@@ -15,7 +15,6 @@ const Container = styled.button`
 	padding: 10px;
 	font-size: 2rem;
 	font-weight: 600;
-	text-transform: lowercase;
 	border-radius: 10px;
 	letter-spacing: 0.2rem;
 	cursor: pointer;
