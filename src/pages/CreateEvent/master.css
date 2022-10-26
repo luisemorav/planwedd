@@ -1,37 +1,36 @@
 ._backgroundImage {
-    background-image: url('./background.jpg');
-    height: 100vh;
-    background-size: cover;
-  }
-  
-  ._containerCentral {
-    padding-top: 50px;
-  }
-  
-  ._backgroundOpacity {
-    background-color: #fffdfa;
-    opacity: 0.75;
-  }
-  
-  ._padTop10 {
-    padding-top: 10px;
-  }
-  
-  ._infoMessage {
-    font-size: 13.5px;
-    font-weight: normal;
-  }
-  
-  ._fontWeight600 {
-    font-weight: 600;
-  }
-  
-  ._fontSize13 {
-    font-size: 13px;
-  }
-  
-  ._textButton {
-    font-weight: bold;
-    color: white;
-    letter-spacing: 2px;
-  }
+	background-image: url("./background.jpg");
+	height: 100%;
+	background-size: cover;
+}
+
+._containerCentral {
+	padding-top: 50px;
+}
+
+._backgroundOpacity {
+	background-color: rgba(255, 253, 250, 0.6);
+}
+
+._padTop10 {
+	padding-top: 10px;
+}
+
+._infoMessage {
+	font-size: 13.5px;
+	font-weight: normal;
+}
+
+._fontWeight600 {
+	font-weight: 600;
+}
+
+._fontSize13 {
+	font-size: 13px;
+}
+
+._textButton {
+	font-weight: bold;
+	color: white;
+	letter-spacing: 2px;
+}
