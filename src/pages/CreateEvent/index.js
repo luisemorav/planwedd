@@ -4,6 +4,37 @@ import "./master.css";
 const CreateEvent = () => {
 	const [username, setUsername] = useState("Nombre Apellido");
 
+	const [imgpreview, setImgpreview] = useState(
+		"https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
+	);
+
+	const [imgsize, setImgsize] = useState(0);
+
+	const [colorconfig, setColorconfig] = useState({
+		primary: "#ffcda9",
+		secondary: "#ffbd59",
+	});
+
+	const [datosE, setDatosE] = useState({
+		nombre_evento: "",
+		fecha_evento: "",
+		texto_portada: "",
+		configuraciones: JSON.stringify(colorconfig),
+	});
+
+	const [datosB, setDatosB] = useState({
+		banco: "",
+		nro_cuenta: "",
+		titular: "",
+	});
+
+	const renderImage = (inputFile) => {
+		const image = URL.createObjectURL(inputFile.target.files[0]);
+		setImgpreview(image);
+		setImgsize(inputFile.target.files[0].size);
+		console.log(imgsize / 1000000);
+	};
+
 	return (
 		<div className="_backgroundImage _fontWeight600">
 			<div className="card _backgroundOpacity p-3">
@@ -30,6 +61,7 @@ const CreateEvent = () => {
 									<input
 										type="text"
 										id="nombre"
+										placeholder="Escribe aqui el nombre de tu evento. Ej. Paco & Lulu..."
 										className="form-control form-control-lg"></input>
 								</div>
 								<div className="col-lg-4 col-md-4 col-sm-12 col-xs-12">
@@ -55,6 +87,7 @@ const CreateEvent = () => {
 									<textarea
 										id="mensaje"
 										rows="11"
+										placeholder="Escribe aqui el mensaje de bienvenida quelos invitados puedan leer en tu perfil..."
 										className="form-control"></textarea>
 								</div>
 
@@ -66,12 +99,18 @@ const CreateEvent = () => {
 									</label>
 									<img
 										className="img-fluid"
-                                        alt="preview"
-										src="https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"></img>
+										alt="preview"
+										src={imgpreview}></img>
+									<p className="text-center">
+										{(imgsize / 1000000).toFixed(2)}MB de
+										2MB
+									</p>
 									<input
 										className="form-control form-control-sm mb-2"
 										id="portada"
-										type="file"></input>
+										type="file"
+										onChange={renderImage}
+										accept="image/png,image/jpeg"></input>
 
 									{/* Gonzalo, borra esto si es que lo puedes mejorar */}
 									<label
@@ -79,22 +118,30 @@ const CreateEvent = () => {
 										className="form-label">
 										Color Principal
 									</label>
+									<label className="form-label _infoMessage">
+										Seleccione un color principal para tu
+										página.
+									</label>
 									<input
 										className="form-control form-control-sm"
 										type="color"
 										id="color1"
-										value="#ffcda9"
+										defaultValue={"#ffcda9"}
 									/>
 									<label
 										htmlFor="color2"
 										className="form-label">
 										Color Secundario
 									</label>
+									<label className="form-label _infoMessage">
+										Seleccione un color secundario para tu
+										página.
+									</label>
 									<input
 										className="form-control form-control-sm"
 										type="color"
 										id="color2"
-										value="#ffbd59"
+										defaultValue={"#ffbd59"}
 									/>
 									{/* -------------------------------------------------- */}
 								</div>
@@ -150,11 +197,12 @@ const CreateEvent = () => {
 													<label
 														htmlFor="cuenta"
 														className="form-label _fontSize13">
-														Número de cuenta
+														Titular
 													</label>
 													<input
 														type="text"
 														id="cuenta"
+														placeholder="Escribe aqui el nombre del titular de la cuenta..."
 														className="form-control form-control-sm"></input>
 												</div>
 
@@ -162,12 +210,12 @@ const CreateEvent = () => {
 													<label
 														htmlFor="CCI"
 														className="form-label _fontSize13">
-														Número de cuenta
-														interbancario
+														Número de Cuenta
 													</label>
 													<input
 														type="text"
 														id="CCI"
+														placeholder="215-..."
 														className="form-control form-control-sm"></input>
 												</div>
 											</div>
