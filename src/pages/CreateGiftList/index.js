@@ -1,5 +1,8 @@
+import { useEffect } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-
+import petitions from "../../api";
+import AddGiftModal from '../../components/AddGiftModal'
 const Container = styled.div`
     width: 100%;
     height: 100vh;
@@ -164,27 +167,83 @@ const CardListButtonDelete = styled.button`
 `
 
 const CreateGiftList = ()=>{
+    const [giftList, setGiftList] = useState("")
+    const [modal, setModal] = useState("none")
+    
+    function ShowModal(){
+        setModal("flex")
+    }
+    function HiddenModal(){
+        setModal("none")
+    }
+    async function getGifts(){
+        try {
+            const res = await petitions.getGiftsByEventId(1)
+            const {data} = await res.json()
+            if(res.status === 200){
+                const gifts = []
+                data.forEach(e =>{
+                    if(e.status){
+                        gifts.push(e)
+                    }
+                })
+                if(giftList !== []){
+                    setGiftList(gifts)
+                } else{
+                    setGiftList("")
+                }
+                return
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async function deleteGift(id){
+        try {
+            const res = await petitions.deleteGiftById(id)
+            console.log(res)
+            getGifts()
+        } catch (error) {
+            
+        }
+        
+    }
+
+    useEffect(()=>{
+        getGifts()
+        console.log(giftList)
+    },[])
     return(
         <Container>
+            <AddGiftModal modal={modal} HiddenModal={HiddenModal}></AddGiftModal>
             <Title1>
                 <h2>crea tu lista de regalos</h2>
             </Title1>
             <GiftsContainer>
                 <GiftList>
                     {/* ForEach This */}
-                    <CardSelect>
-                        <CardSelectLeft>
-                            <img src="https://hogarimagen.com/wp-content/uploads/2019/03/Sillon-para-dormitorio-N%C3%B3rdica-color-negro.png" alt="" />
-                        </CardSelectLeft>
-                        <CardSelectRight>
-                            <CardListButtonDelete>Eliminar</CardListButtonDelete>
-                            <CardListTitle>Sillón Nórdica Negro – RIO</CardListTitle>
-                            <CardListPrice>S/700</CardListPrice>
-                        </CardSelectRight>
-                    </CardSelect>
+                    {
+                        giftList &&
+                        giftList.map((e,i)=>{
+                            return(
+                                <CardSelect key={i}>
+                                    <CardSelectLeft>
+                                        <img src={e.img_regalo} alt={e.descripcion} />
+                                    </CardSelectLeft>
+                                    <CardSelectRight>
+                                        <CardListButtonDelete onClick={()=>{deleteGift(e.id)}}>Eliminar</CardListButtonDelete>
+                                        <CardListTitle>{e.nombre}</CardListTitle>
+                                        <CardListPrice>S/{e.precio}</CardListPrice>
+                                    </CardSelectRight>
+                                </CardSelect>
+                            )
+                        })
+                    }
+                    
                 </GiftList>
                 <GiftsDefault>
-                    <AddCardGift>
+                    <AddCardGift onClick={ShowModal} >
                         <i className="fa-solid fa-plus"></i>
                         <h4>Crear nuevo regalo</h4>
                     </AddCardGift>
@@ -193,8 +252,11 @@ const CreateGiftList = ()=>{
                         <CardDefaultLeftContainer>
                             <img src="https://hogarimagen.com/wp-content/uploads/2019/03/Sillon-para-dormitorio-N%C3%B3rdica-color-negro.png" alt="" />
                         </CardDefaultLeftContainer>
-                        <CardDefaultRightContainer>
-                            <ButtonGiftDefault>Agregar</ButtonGiftDefault>
+                        <CardDefaultRightContainer >
+                            <div style={{width:"100%", display:"flex",gap:"20px"}}>
+                                <ButtonGiftDefault style={{width:"50%"}}>Editar</ButtonGiftDefault>
+                                <ButtonGiftDefault style={{width:"50%"}}>Agregar</ButtonGiftDefault>
+                            </div>
                             <CardDefaultTitle>Sillón Nórdica Negro – RIO</CardDefaultTitle>
                             <CardDefaultPrice>s/700</CardDefaultPrice>
                         </CardDefaultRightContainer>

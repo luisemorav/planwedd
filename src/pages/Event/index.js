@@ -12,7 +12,7 @@ const Container = styled.div`
 `;
 const ContainerBanner = styled.div`
 	width: 100%;
-	height: 35%;
+	height: 45%;
 	background-color: pink;
 	background-size: cover;
 	background-repeat: no-repeat;
@@ -20,8 +20,6 @@ const ContainerBanner = styled.div`
 const ContainerDescription = styled.div`
 	width: 100%;
 	height: calc(100% - 35%);
-	/* padding-top: 30px; */
-	/* border-top: 2px solid #C6C6C8; */
 	border-bottom: 2px solid #c6c6c8;
 	display: flex;
 	flex-direction: column;
@@ -108,7 +106,6 @@ const CardContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
-	/* background-color: red; */
 `;
 const Cards = styled.div`
 	width: 100%;
@@ -239,7 +236,7 @@ const Event = () => {
 						</UlContainer>
 					</Information>
 					<Buttons>
-						<Link to={`/event/${event.usuario_id}/gifts/` + event.id}>
+						<Link to={`/event/${event.usuario_id}/gifts/` + event.id} style={{textDecoration:"none"}}>
 							<Button>
 								<i
 									style={{ fontSize: "4rem" }}

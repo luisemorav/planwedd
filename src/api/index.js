@@ -49,11 +49,39 @@ async function getGiftsByEventId(id){
     return res
 }
 
+
+// ! DELETE PETITIONS
+// !change the key bearer
+async function deleteGiftById(id){
+    const configuration = {
+        method:"DELETE",
+        headers:{
+            "accept":"aplication/json",
+            "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY2Njc0MTE5MiwianRpIjoiZmM1OGRmZGQtNTIzNC00YTM4LWE1N2MtM2U0NmY2MjkyYWEwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MywibmJmIjoxNjY2NzQxMTkyLCJleHAiOjE2NjY3NTE5OTJ9.lVVrsu8nwy2mibNFvkVJbeSbywf0uP1Z2Wy1ys80zIg"
+        }
+    }
+    const res = await fetch(`${URL}/gifts/${id}`, configuration)
+    return res
+}
+
+//* POST Petitions
+
+// async function postDefaultGift(gift){
+//     const configuration = {
+//         method:"POST",
+//         headers:{
+//             "accept":"aplication/json",
+//             "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY2Njc0MTE5MiwianRpIjoiZmM1OGRmZGQtNTIzNC00YTM4LWE1N2MtM2U0NmY2MjkyYWEwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MywibmJmIjoxNjY2NzQxMTkyLCJleHAiOjE2NjY3NTE5OTJ9.lVVrsu8nwy2mibNFvkVJbeSbywf0uP1Z2Wy1ys80zIg"
+//         }
+//     }
+// }
 const petitions = {
     getEvents,
     getEventByIdUser,
     getDedicatoriasByEventID,
-    getGiftsByEventId
+    getGiftsByEventId,
+    deleteGiftById,
+    // postDefaultGift
 }
 
 export default petitions

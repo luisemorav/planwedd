@@ -27,7 +27,7 @@ const ContainerGifts = styled.div`
 `
 const ContainerBanner = styled.div`
     width: 100%;
-    height: 35%;
+    height: 45%;
     background-color: white;
     background-size: cover;
     background-repeat: no-repeat;
@@ -118,9 +118,15 @@ const GiftList = ()=>{
         const res = await petitions.getGiftsByEventId(id) 
         const {data} = await res.json()
         if(res.status === 200){
-            console.log(userId)
-            setGiftsList(data)
-            
+            let gifts = []
+            data.forEach(e=>{
+                // setGiftsList(data)
+                if(e.status === true){
+                    gifts.push(e)
+                }
+                // console.log(e.status)
+            })
+            setGiftsList(gifts)
             return
         }
     }
