@@ -12,10 +12,12 @@ const Container = styled.div`
 `;
 const ContainerBanner = styled.div`
 	width: 100%;
-	height: 35%;
+	height: 45%;
 	background-color: pink;
 	background-size: cover;
 	background-repeat: no-repeat;
+	background-position: center;
+
 `;
 const ContainerDescription = styled.div`
 	width: 100%;

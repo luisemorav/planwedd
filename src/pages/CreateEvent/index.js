@@ -1,10 +1,10 @@
 import { useContext, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import UserContext from "../../context/UserContext";
 import "./master.css";
 
 const CreateEvent = () => {
-	const { user, login, logout } = useContext(UserContext);
+	const { user, logout } = useContext(UserContext);
 
     const navigate = useNavigate()
 
