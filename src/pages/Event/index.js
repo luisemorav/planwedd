@@ -16,6 +16,8 @@ const ContainerBanner = styled.div`
 	background-color: pink;
 	background-size: cover;
 	background-repeat: no-repeat;
+	background-position: center;
+
 `;
 const ContainerDescription = styled.div`
 	width: 100%;
@@ -184,7 +186,9 @@ const Event = () => {
 
 	useEffect(() => {
 		cargarEvento();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
 	const cargarEvento = async () => {
 		try {
 			const res = await petitions.getEventByIdUser(id)
