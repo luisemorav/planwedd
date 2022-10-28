@@ -160,15 +160,29 @@ const Login = () => {
 				};
 				let res = await fetch("http://127.0.0.1:5000/users/me", config);
 				let user = await res.json();
-				let session = {
-					access_token: json["access_token"],
-					refresh_token: json["refresh_token"],
-					id: user["data"]["id"],
-					nombres: user["data"]["nombres"],
-					apellidos: user["data"]["apellidos"],
-				};
-				login(session);
-				localStorage.setItem("planweddlogin", JSON.stringify(session));
+				if (user["data"]["cuentas"].length === 0) {
+					let session = {
+						access_token: json["access_token"],
+						refresh_token: json["refresh_token"],
+						id: user["data"]["id"],
+						cuenta_id: null,
+						nombres: user["data"]["nombres"],
+						apellidos: user["data"]["apellidos"],
+					};
+					login(session);
+				} else {
+					let session = {
+						access_token: json["access_token"],
+						refresh_token: json["refresh_token"],
+						id: user["data"]["id"],
+						cuenta_id: user["data"]["cuentas"][0]["id"],
+						nombres: user["data"]["nombres"],
+						apellidos: user["data"]["apellidos"],
+					};
+					login(session);
+				}
+
+				// localStorage.setItem("planweddlogin", JSON.stringify(session));
 				navigate("/createevent");
 			} else {
 				setMsgerr(json.error);

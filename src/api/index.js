@@ -2,6 +2,8 @@ import URL from "./config";
 import { useContext } from "react";
 import UserContext from "../context/UserContext";
 
+
+
 const key =
 	"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY2Njk3Njg0OSwianRpIjoiZjVmY2MzYzgtNDYwNy00OTI4LWEyNzQtOTgzM2YyMjk2ODZiIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MywibmJmIjoxNjY2OTc2ODQ5LCJleHAiOjE2NjY5ODc2NDl9.AVlGtEPCVjWIbJSdcd_sdlVzoHIxNCcriqlzq-65hMQ";
 
@@ -27,6 +29,7 @@ async function getEventByIdUser(id) {
 	let res = await fetch(`${URL}/events${id}`, config);
 	return res;
 }
+
 async function getDedicatoriasByEventID(id) {
 	let config = {
 		method: "GET",

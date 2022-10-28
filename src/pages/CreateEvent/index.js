@@ -9,14 +9,22 @@ const CreateEvent = () => {
 
 	const [evento, setEvent] = useState();
 
+	const [cuenta, setCuenta] = useState();
+
 	const [existEvent, setExistEvent] = useState(false);
+
+	const [existCuenta, setExistCuenta] = useState(false);
 
 	const [primaryColor, setPrimaryColor] = useState("#ffcda9");
 	const [secondaryColor, setSecondaryColor] = useState("#ffbd59");
 
+	const [linkEvento, setLinkEvento] = useState(window.location.host);
+
 	const navigate = useNavigate();
 
-	const [imgpreview, setImgpreview] = useState("");
+	const [imgpreview, setImgpreview] = useState(
+		"https://artsmidnorthcoast.com/wp-content/uploads/2014/05/no-image-available-icon-6.png"
+	);
 
 	const [img, setImg] = useState();
 
@@ -38,12 +46,13 @@ const CreateEvent = () => {
 		banco: "",
 		nro_cuenta: "",
 		titular: "",
+		usuario_id: user.id,
 	});
 
 	const cargarEvento = async () => {
 		try {
 			const res = await petitions.getEventByIdUser(user.id);
-			
+
 			let eventData = await res.json();
 			if (res.status === 200) {
 				setExistEvent(true);
@@ -67,9 +76,48 @@ const CreateEvent = () => {
 					configuraciones: eventData.data[0]["configuraciones"],
 				});
 
+				if (user.cuenta_id !== null) {
+					cargarCuenta();
+				}
+
 				return;
 			} else if (res.status === 404) {
 				console.log(eventData["message"]);
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const cargarCuenta = async () => {
+		try {
+			let config = {
+				method: "GET",
+				headers: {
+					accept: "application/json",
+					Authorization: `Bearer ${user.access_token}`,
+					"Content-Type": "application/json",
+				},
+			};
+			let res = await fetch(
+				`http://127.0.0.1:5000/baccounts/${user.cuenta_id}`,
+				config
+			);
+			let cuentaData = await res.json();
+			if (res.status === 200) {
+				setDatosB({
+					banco: cuentaData.data["banco"],
+					nro_cuenta: cuentaData.data["nro_cuenta"],
+					titular: cuentaData.data["titular"],
+					usuario_id: cuentaData.data["usuario"]["id"],
+				});
+
+				setExistCuenta(true);
+
+				setCuenta(cuentaData.data);
+				return;
+			} else if (res.status === 404) {
+				console.log(cuentaData["message"]);
 			}
 		} catch (error) {
 			console.log(error);
@@ -151,6 +199,26 @@ const CreateEvent = () => {
 		} catch (error) {
 			console.log(error);
 		}
+
+		try {
+			let config = {
+				method: "post",
+				headers: {
+					accept: "application/json",
+					Authorization: `Bearer ${user.access_token}`,
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(datosB),
+			};
+			let response = await fetch(
+				"http://127.0.0.1:5000/baccounts",
+				config
+			);
+			let json = await response.json();
+			console.log(json);
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	const actualizarDatos = async (event) => {
@@ -171,7 +239,30 @@ const CreateEvent = () => {
 				config
 			);
 			let json = await response.json();
-			console.log(json);
+			console.log(json.messsage);
+		} catch (error) {
+			console.log(error);
+		}
+
+		try {
+			let datosB2 = datosB;
+			delete datosB2.usuario_id;
+
+			let config = {
+				method: "put",
+				headers: {
+					accept: "application/json",
+					Authorization: `Bearer ${user.access_token}`,
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(datosB2),
+			};
+			let response = await fetch(
+				`http://127.0.0.1:5000/baccounts/${user.cuenta_id}`,
+				config
+			);
+			let json = await response.json();
+			console.log(json.messsage);
 		} catch (error) {
 			console.log(error);
 		}
@@ -204,7 +295,11 @@ const CreateEvent = () => {
 						, crea o edita tu evento en el formulario de abajo.
 					</h4>
 					{user ? (
-						<button onClick={logOut}>Cerrar Sesión</button>
+						<button
+							onClick={logOut}
+							className="_textButton col-white btn btn-info">
+							Cerrar Sesión
+						</button>
 					) : (
 						<button onClick={logIn}>Iniciar Sesión</button>
 					)}
@@ -214,6 +309,12 @@ const CreateEvent = () => {
 				<h1 className="text-center">
 					{existEvent ? "Edita tu Evento" : "Crea tu Evento"}
 				</h1>
+				<h5 className="text-center">
+					Link de tu evento:
+					<strong>
+						{existEvent ? ` ${linkEvento}/event/${user.id}` : "-"}
+					</strong>
+				</h5>
 				<div className="card _backgroundOpacity">
 					<div className="card-body">
 						<div className="container">
@@ -374,9 +475,15 @@ const CreateEvent = () => {
 														onChange={
 															handleInputChange
 														}>
-														<option disabled>
-															Seleccione...
-														</option>
+														{existCuenta ? (
+															<option>
+																{cuenta.banco}
+															</option>
+														) : (
+															<option disabled>
+																Seleccione...
+															</option>
+														)}
 														<option value="BCP">
 															BCP
 														</option>
@@ -389,10 +496,10 @@ const CreateEvent = () => {
 														<option value="Scotiabank">
 															Scotiabank
 														</option>
-														<option value="Scotiabank">
+														<option value="Banbif">
 															Banbif
 														</option>
-														<option value="Scotiabank">
+														<option value="Banco de la Nación">
 															Banco de la Nación
 														</option>
 													</select>
@@ -412,7 +519,12 @@ const CreateEvent = () => {
 															handleInputChange
 														}
 														placeholder="Escribe aqui el nombre del titular de la cuenta..."
-														className="form-control form-control-sm"></input>
+														className="form-control form-control-sm"
+														defaultValue={
+															existCuenta
+																? cuenta.titular
+																: ""
+														}></input>
 												</div>
 
 												<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -429,7 +541,12 @@ const CreateEvent = () => {
 														onChange={
 															handleInputChange
 														}
-														className="form-control form-control-sm"></input>
+														className="form-control form-control-sm"
+														defaultValue={
+															existCuenta
+																? cuenta.nro_cuenta
+																: ""
+														}></input>
 												</div>
 											</div>
 										</div>
@@ -451,6 +568,15 @@ const CreateEvent = () => {
 											? "Guardar Cambios"
 											: "Crear Evento"}
 									</button>
+									{existEvent ? (
+										<button
+											type="button"
+											className="ms-5 _textButton col-white btn btn-info btn-lg">
+											Lista de Regalos
+										</button>
+									) : (
+										""
+									)}
 								</div>
 							</div>
 						</div>
