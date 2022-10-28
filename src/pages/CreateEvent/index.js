@@ -1,16 +1,22 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import petitions from "../../api";
 import UserContext from "../../context/UserContext";
 import "./master.css";
 
 const CreateEvent = () => {
 	const { user, logout } = useContext(UserContext);
 
-    const navigate = useNavigate()
+	const [evento, setEvent] = useState();
 
-	const [imgpreview, setImgpreview] = useState(
-		"https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
-	);
+	const [existEvent, setExistEvent] = useState(false);
+
+	const [primaryColor, setPrimaryColor] = useState("#ffcda9");
+	const [secondaryColor, setSecondaryColor] = useState("#ffbd59");
+
+	const navigate = useNavigate();
+
+	const [imgpreview, setImgpreview] = useState("");
 
 	const [img, setImg] = useState();
 
@@ -34,6 +40,49 @@ const CreateEvent = () => {
 		titular: "",
 	});
 
+	const cargarEvento = async () => {
+		try {
+			const res = await petitions.getEventByIdUser(user.id);
+			// console.log(res);
+			let eventData = await res.json();
+			if (res.status === 200) {
+				setExistEvent(true);
+
+				// console.log(eventData);
+				setEvent(eventData.data[0]);
+
+				setPrimaryColor(
+					JSON.parse(eventData.data[0]["configuraciones"])["primary"]
+				);
+				setSecondaryColor(
+					JSON.parse(eventData.data[0]["configuraciones"])[
+						"secondary"
+					]
+				);
+
+				setDatosE({
+					nombre_evento: eventData.data[0]["nombre_evento"],
+					fecha_evento: eventData.data[0]["fecha_evento"],
+					texto_portada: eventData.data[0]["texto_portada"],
+					img_portada: eventData.data[0]["img_portada"],
+					configuraciones: eventData.data[0]["configuraciones"],
+				});
+
+				return;
+			} else if (res.status === 404) {
+				console.log(eventData["message"]);
+			}
+		} catch (error) {
+			// navigate("/404");
+			console.log(error);
+		}
+	};
+
+	useEffect(() => {
+		cargarEvento();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
 	const handleInputChange = (event) => {
 		if (
 			event.target.name === "banco" ||
@@ -56,6 +105,11 @@ const CreateEvent = () => {
 				...datosE,
 				configuraciones: JSON.stringify(colorconfig),
 			});
+			if (event.target.name === "primary") {
+				setPrimaryColor(event.target.value);
+			} else if (event.target.name === "secondary") {
+				setSecondaryColor(event.target.value);
+			}
 		} else {
 			setDatosE({
 				...datosE,
@@ -101,14 +155,42 @@ const CreateEvent = () => {
 		}
 	};
 
-    const logOut = () => {
-        logout()
-        navigate('/login')
-    }
+	const actualizarDatos = async (event) => {
+		event.preventDefault();
 
-    const logIn = () => {
-        navigate('/login')
-    }
+		try {
+			let config = {
+				method: "put",
+				headers: {
+					accept: "application/json",
+					Authorization: `Bearer ${user.access_token}`,
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(datosE),
+			};
+			let response = await fetch(
+				`http://127.0.0.1:5000/events/${evento["id"]}`,
+				config
+			);
+			let json = await response.json();
+			console.log(json);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const logOut = () => {
+		logout();
+		navigate("/login");
+	};
+
+	const logIn = () => {
+		navigate("/login");
+	};
+
+	if (!user) {
+		logIn();
+	}
 
 	return (
 		<div className="_backgroundImage _fontWeight600">
@@ -131,7 +213,9 @@ const CreateEvent = () => {
 				</div>
 			</div>
 			<div className="container _containerCentral p-3">
-				<h1 className="text-center">Crea tu evento!</h1>
+				<h1 className="text-center">
+					{existEvent ? "Edita tu Evento" : "Crea tu Evento"}
+				</h1>
 				<div className="card _backgroundOpacity">
 					<div className="card-body">
 						<div className="container">
@@ -148,7 +232,12 @@ const CreateEvent = () => {
 										id="nombre"
 										placeholder="Escribe aqui el nombre de tu evento. Ej. Paco & Lulu..."
 										className="form-control form-control-lg"
-										onChange={handleInputChange}></input>
+										onChange={handleInputChange}
+										defaultValue={
+											existEvent
+												? evento.nombre_evento
+												: ""
+										}></input>
 								</div>
 								<div className="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 									<label
@@ -161,7 +250,12 @@ const CreateEvent = () => {
 										type="date"
 										id="fecha"
 										className="form-control form-control-lg"
-										onChange={handleInputChange}></input>
+										onChange={handleInputChange}
+										defaultValue={
+											existEvent
+												? evento.fecha_evento
+												: ""
+										}></input>
 								</div>
 							</div>
 
@@ -178,31 +272,45 @@ const CreateEvent = () => {
 										rows="11"
 										placeholder="Escribe aqui el mensaje de bienvenida quelos invitados puedan leer en tu perfil..."
 										className="form-control"
-										onChange={handleInputChange}></textarea>
+										onChange={handleInputChange}
+										defaultValue={
+											existEvent
+												? evento.texto_portada
+												: ""
+										}></textarea>
 								</div>
 
 								<div className="_padTop10 col-lg-4 col-md-4 col-sm-12 col-xs-12">
 									<label
 										htmlFor="portada"
 										className="form-label">
-										Agregar foto de portada
+										{existEvent
+											? "Tu foto de protada"
+											: "Agregar foto de portada"}
 									</label>
 									<img
 										className="img-fluid"
 										alt="preview"
-										src={imgpreview}></img>
+										src={
+											existEvent
+												? evento.img_portada
+												: imgpreview
+										}></img>
 									<p className="text-center">
 										{(imgsize / 1000000).toFixed(2)}MB de
 										2MB
 									</p>
-									<input
-										className="form-control form-control-sm mb-2"
-										id="portada"
-										type="file"
-										onChange={renderImage}
-										accept="image/png,image/jpeg"></input>
+									{existEvent ? (
+										""
+									) : (
+										<input
+											className="form-control form-control-sm mb-2"
+											id="portada"
+											type="file"
+											onChange={renderImage}
+											accept="image/png,image/jpeg"></input>
+									)}
 
-									{/* Gonzalo, borra esto si es que lo puedes mejorar */}
 									<label
 										htmlFor="color1"
 										className="form-label">
@@ -218,7 +326,7 @@ const CreateEvent = () => {
 										name="primary"
 										onInput={handleInputChange}
 										id="color1"
-										defaultValue={"#ffcda9"}
+										value={primaryColor}
 									/>
 									<label
 										htmlFor="color2"
@@ -235,9 +343,8 @@ const CreateEvent = () => {
 										name="secondary"
 										onInput={handleInputChange}
 										id="color2"
-										defaultValue={"#ffbd59"}
+										value={secondaryColor}
 									/>
-									{/* -------------------------------------------------- */}
 								</div>
 
 								<div className="_padTop10 col-lg-4 col-md-4 col-sm-12 col-xs-12">
@@ -336,9 +443,15 @@ const CreateEvent = () => {
 								<div className="_padTop10 text-center col-lg-12 col-md-12 col-sm-12 col-xs-12">
 									<button
 										type="button"
-										onClick={enviarDatos}
+										onClick={
+											existEvent
+												? actualizarDatos
+												: enviarDatos
+										}
 										className="_textButton col-white btn btn-info btn-lg">
-										Guardar Cambios
+										{existEvent
+											? "Guardar Cambios"
+											: "Crear Evento"}
 									</button>
 								</div>
 							</div>

@@ -170,7 +170,9 @@ const Event = () => {
 
 	useEffect(() => {
 		cargarEvento();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
 	const cargarEvento = async () => {
 		try {
 			const res = await petitions.getEventByIdUser(id)
