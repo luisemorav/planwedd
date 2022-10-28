@@ -6,7 +6,7 @@ import UserContext from "../../context/UserContext";
 import "./master.css";
 
 const CreateEvent = () => {
-	const { user, logout } = useContext(UserContext);
+	const { user, logout, loadEvent } = useContext(UserContext);
 
 	const [evento, setEvent] = useState();
 
@@ -76,6 +76,11 @@ const CreateEvent = () => {
 					img_portada: eventData.data[0]["img_portada"],
 					configuraciones: eventData.data[0]["configuraciones"],
 				});
+
+				let mievento = {
+					event_id: eventData.data[0]["id"]
+				}
+				loadEvent(mievento)
 
 				if (user.cuenta_id !== null) {
 					cargarCuenta();
@@ -322,6 +327,7 @@ const CreateEvent = () => {
 	};
 
 	const cargarLista = () => {
+		
 		navigate("/createGift")
 	};
 
