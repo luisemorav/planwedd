@@ -1,4 +1,8 @@
 import URL from './config'
+import { useContext } from "react";
+import UserContext from "../context/UserContext";
+
+
 const key = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY2Njk3Njg0OSwianRpIjoiZjVmY2MzYzgtNDYwNy00OTI4LWEyNzQtOTgzM2YyMjk2ODZiIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MywibmJmIjoxNjY2OTc2ODQ5LCJleHAiOjE2NjY5ODc2NDl9.AVlGtEPCVjWIbJSdcd_sdlVzoHIxNCcriqlzq-65hMQ"
 
 // const keyRefresh = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY2Njk3Njg0OSwianRpIjoiNDRmOTgzYzktN2I1NC00MGQyLTk5OWUtNTQxNDkzZWEzZDU1IiwidHlwZSI6InJlZnJlc2giLCJzdWIiOjMsIm5iZiI6MTY2Njk3Njg0OSwiZXhwIjoxNjY2OTk4NDQ5fQ.9gNM_k-PKe0UiaWR0iaSxrg_vjfWx7RePD62hY5I5Qo"
@@ -69,6 +73,7 @@ async function deleteGiftById(id){
 
 //* POST Petitions
 async function postGiftByEventId(data){
+// const { user, logout } = useContext(UserContext);
     const configuration = {
         headers:{
             ContentType:"multipart/form-data",
