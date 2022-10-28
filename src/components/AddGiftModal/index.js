@@ -1,6 +1,8 @@
 import styled from "styled-components"
 import { useState} from "react"
-import { useForm } from "react-hook-form"
+import petitions from "../../api"
+import Swal from "sweetalert2"
+// import {}
 const Container = styled.div`
     width: 100%;
     height: 100vh;
@@ -24,7 +26,7 @@ const Form = styled.form`
     h2{
         text-align: center;
     }
-`
+    `
 // mini components
 const Input = styled.input`
     width: 100%;
@@ -65,7 +67,7 @@ const ButtonSubmit = styled.button`
         color: teal; */
         background-color: #00b3b3;
     }
-`
+    `
 const EquitButton = styled.div`
     width: 50px;
     height: 50px;
@@ -85,11 +87,9 @@ const EquitButton = styled.div`
         background-color: tomato;
     }
 `
-const AddGiftModal = ({modal , HiddenModal})=>{
+const AddGiftModal = ({modal , HiddenModal, getGifts})=>{
     const [imgDefault, setImgDefault] = useState("https://www.suzukijember.com/gallery/gambar_product/default.jpg")
     const [imgDefaultSize, setImgDefaultSize] = useState("0.00")
-
-    const {postGift, handleSubmit} = useForm()
     const [img, setImg] = useState("")
 
     function handleImg(e){
@@ -98,51 +98,78 @@ const AddGiftModal = ({modal , HiddenModal})=>{
         const imgSize = (e.target.files[0].size / 1000000).toFixed(2)
         setImgDefault(urlImg)
         setImgDefaultSize(imgSize)
-        // console.log((imgSize / 1000000).toFixed(2))
     }
-    // const image = URL.createObjectURL(inputFile.target.files[0]);
-    // setImgpreview(image);
-    // setImgsize(inputFile.target.files[0].size);
-    // console.log(imgsize / 1000000);
     
-    function exportdata(data){
-        // e.preventDefault()
+    function exportdata(e){
+        e.preventDefault()
+        const {nombre, precio, descripcion} = Object.fromEntries(
+            new FormData(e.target)
+        )
+        // !Cambiar ID de evento segun el User
         const formData = new FormData()
-        formData.append("nombre","nose")
-        formData.append("description","desc")
+        formData.append("nombre",nombre)
         formData.append("img_regalo",img)
-        formData.append("precio","999")
-        formData.append("evento_id","1")
-        console.log(formData.values())
-        for (const value of formData){
-            console.log(value)
-        }
+        formData.append("precio",precio)
+        formData.append("descripcion",descripcion)
+        formData.append("evento_id",1)
         petition(formData)
+        
     }
     async function petition(data){
-        const res = await fetch("http://127.0.0.1:5000/gifts", {
-            headers:{
-                'Content-Type':'multipart/form-data',
-                accept:"application/json",
-                Authorization:"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY2NjgwMTUwNywianRpIjoiMDExNTVkOTktMTU5Mi00ODk3LWIxYjUtNTRjODA4ZTZmNmE2IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MywibmJmIjoxNjY2ODAxNTA3LCJleHAiOjE2NjY4MTIzMDd9.J-Q0aM06W8fQ8v6Vdi2xc83H8vmxdd3PmEfwHGuwl5w"
+        Swal.fire({
+            title: 'Subiendo Regalo!',
+            html: 'esto puede tardar un poco dependiendo de tu internet',
+            timerProgressBar: true,
+            showConfirmButton: false,
+            didOpen:async () => {
+                Swal.showLoading()
+                try {
+                    const res = await petitions.postGiftByEventId(data)
+                    const date = await res.json()
+                    console.log(res)
+                    if(res.ok){
+                        Swal.fire({
+                            title: 'Exito!',
+                            text: date.message,
+                            icon: 'success',
+                            confirmButtonText: 'aceptar'
+                        })
+                        HiddenModal()
+                        getGifts()
+                        return
+                    } else{
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'al parecer hubo un error con la autorizacion',
+                            icon: 'error',
+                            confirmButtonText: 'aceptar'
+                        })
+                    }
+                    
+                } catch (error) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'al parecer hubo un error con el servidor',
+                        icon: 'error',
+                        confirmButtonText: 'aceptar'
+                    })
+                }
             },
-            method:"POST",
-            body:data
         })
-        // const date = await res.json()
-        // console.log(date)
+        
     }
     return(
         <Container style={{display:modal}}>
 
 
-            <Form onSubmit={handleSubmit(exportdata)}>
+            <Form onSubmit={exportdata}>
                 <EquitButton onClick={HiddenModal}><i className="fa-solid fa-xmark"></i></EquitButton>
 
+
                 <h2>Agregar Nuevo regalo deseado</h2>
-                <Input type={"text"}  placeholder={"nombre de regalo"}/>
-                <Input type={"text"}  placeholder={"description"}/>
-                <Input type={"number"} placeholder={"precio del producto"}/>
+                <Input type={"text"} name="nombre" placeholder={"nombre de regalo"}/>
+                <Input type={"text"} name="descripcion" placeholder={"descripcion del regalo"}/>
+                <Input type={"number"}  name="precio" placeholder={"precio del producto"}/>
                 <img src={imgDefault} style={{maxWidth:"50%", borderRadius:"20px",objectFit:"cover"}} alt="imagen de producto"/>
                 <p style={{color:(imgDefaultSize > 2 )? "red":"black" }}>{imgDefaultSize}MB de 2.00MB</p>
                 <p style={{
@@ -150,8 +177,11 @@ const AddGiftModal = ({modal , HiddenModal})=>{
                     color:(imgDefaultSize > 2 )? "red":"black"
                 
                 }}>el archivo es demasiado grande</p>
-                <InputFile type={"file"}  onChange={handleImg}/>
-                {/* <Input type={"number"}  placeholder={"event id"}/> */}
+
+                <InputFile type={"file"} name="img_regalo"  onChange={handleImg}/>
+
+
+
                 <ButtonSubmit type="submit">Agregar</ButtonSubmit>
             </Form>
         </Container>

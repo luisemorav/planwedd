@@ -1,4 +1,7 @@
 import URL from './config'
+const key = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY2Njk3Njg0OSwianRpIjoiZjVmY2MzYzgtNDYwNy00OTI4LWEyNzQtOTgzM2YyMjk2ODZiIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MywibmJmIjoxNjY2OTc2ODQ5LCJleHAiOjE2NjY5ODc2NDl9.AVlGtEPCVjWIbJSdcd_sdlVzoHIxNCcriqlzq-65hMQ"
+
+// const keyRefresh = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY2Njk3Njg0OSwianRpIjoiNDRmOTgzYzktN2I1NC00MGQyLTk5OWUtNTQxNDkzZWEzZDU1IiwidHlwZSI6InJlZnJlc2giLCJzdWIiOjMsIm5iZiI6MTY2Njk3Njg0OSwiZXhwIjoxNjY2OTk4NDQ5fQ.9gNM_k-PKe0UiaWR0iaSxrg_vjfWx7RePD62hY5I5Qo"
 
 async function getEvents(){
     const response = await fetch(URL + "/events", {
@@ -56,8 +59,8 @@ async function deleteGiftById(id){
     const configuration = {
         method:"DELETE",
         headers:{
-            "accept":"aplication/json",
-            "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY2Njc0MTE5MiwianRpIjoiZmM1OGRmZGQtNTIzNC00YTM4LWE1N2MtM2U0NmY2MjkyYWEwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MywibmJmIjoxNjY2NzQxMTkyLCJleHAiOjE2NjY3NTE5OTJ9.lVVrsu8nwy2mibNFvkVJbeSbywf0uP1Z2Wy1ys80zIg"
+            "accept":"aplication/json"
+            // "Authorization": key
         }
     }
     const res = await fetch(`${URL}/gifts/${id}`, configuration)
@@ -65,23 +68,56 @@ async function deleteGiftById(id){
 }
 
 //* POST Petitions
+async function postGiftByEventId(data){
+    const configuration = {
+        headers:{
+            ContentType:"multipart/form-data",
+            accept:"application/json",
+            "Authorization": key
+        },
+        method:"POST",
+        body:data
+    }
+    const res = await fetch(`${URL}/gifts`,configuration)
+    return res
+}
+async function postDedicatoria(data){
+    const dedicatoria = JSON.stringify(data)
+    const configuration = {
+        headers:{
+            "Content-Type":"application/json",
+            accept:"application/json"
+        },
+        method:"POST",
+        body:dedicatoria
+    }
+    const res = await fetch(`${URL}/dedications`,configuration)
+    return res
+}
+async function postDefaultGifts(data){
+    const gift = JSON.stringify(data)
+    const configuration = {
+        headers:{
+            "Content-Type":"application/json",
+            accept:"application/json",
+            Authorization:key
+        },
+        method:"POST",
+        body:gift
+    }
+    const res = await fetch(`${URL}/gifts/soft`,configuration)
+    return res
+}
 
-// async function postDefaultGift(gift){
-//     const configuration = {
-//         method:"POST",
-//         headers:{
-//             "accept":"aplication/json",
-//             "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY2Njc0MTE5MiwianRpIjoiZmM1OGRmZGQtNTIzNC00YTM4LWE1N2MtM2U0NmY2MjkyYWEwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MywibmJmIjoxNjY2NzQxMTkyLCJleHAiOjE2NjY3NTE5OTJ9.lVVrsu8nwy2mibNFvkVJbeSbywf0uP1Z2Wy1ys80zIg"
-//         }
-//     }
-// }
 const petitions = {
     getEvents,
     getEventByIdUser,
     getDedicatoriasByEventID,
     getGiftsByEventId,
     deleteGiftById,
-    // postDefaultGift
+    postGiftByEventId,
+    postDedicatoria,
+    postDefaultGifts
 }
 
 export default petitions

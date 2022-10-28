@@ -3,6 +3,9 @@ import { useState } from "react";
 import styled from "styled-components";
 import petitions from "../../api";
 import AddGiftModal from '../../components/AddGiftModal'
+import Swal from "sweetalert2";
+import GiftDefaultEditModal from '../../components/GiftDefaultEditModal'
+import giftsDefault from '../../api/giftsDefaults'
 const Container = styled.div`
     width: 100%;
     height: 100vh;
@@ -30,11 +33,20 @@ const GiftList = styled.div`
     height: 100%;
     background-color: #f4f4f4;
     display: grid;
-    grid-template-columns: 400px 400px;
-    grid-auto-rows: 200px;
+    grid-template-columns: 450px 450px;
+    grid-auto-rows: 250px;
     justify-content: center;
     gap: 30px;
     padding: 30px;
+    overflow: auto;
+    @media (max-width:1650px) {
+        grid-template-columns: 400px 400px;
+        
+    }
+    @media (max-width:1500px) {
+        grid-template-columns: 400px;
+        
+    }
 `
 const GiftsDefault = styled.div`
     width: 40%;
@@ -75,10 +87,14 @@ const CardGiftDefault = styled.div`
 `
 // minicomponents ===> 
 const CardDefaultTitle = styled.h5`
-    font-size: 1.5rem;
+    font-size: 1rem;
 `
 const CardDefaultPrice = styled.h2`
     font-size: 1rem;
+    position: absolute;
+    font-weight: bold;
+    bottom: 5px;
+    left:20px;
 `
 const CardDefaultLeftContainer = styled.div`
     width: 40%;
@@ -99,6 +115,7 @@ const CardDefaultRightContainer = styled.div`
     flex-direction: column;
     gap: 20px;
     padding: 20px;
+    position: relative;
 `
 const ButtonGiftDefault = styled.button`
     background-color: white;
@@ -110,11 +127,10 @@ const ButtonGiftDefault = styled.button`
     border: none;
     transition: color, background, 0.3s;
     &:hover{
-        background-color: lightgreen;
+        background-color: teal;
         color:white;
     }
 `
-
 // fetch Cards =============
 const CardSelect = styled.div`
     border-radius: 10px;
@@ -130,7 +146,8 @@ const CardSelectLeft = styled.div`
     img{
         border-radius: 20px;
         width: 100%;
-        object-fit: contain;
+        height: 100%;
+        object-fit: cover;
     }
 `
 const CardSelectRight = styled.div`
@@ -140,16 +157,22 @@ const CardSelectRight = styled.div`
     padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
+    position: relative;
 `
 const CardListTitle = styled.p`
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 600;
     line-height: 90%;
+    margin: 0;
+    overflow: hidden;
 `
 const CardListPrice = styled.p`
     font-size: 1.2rem;
     font-weight: 700;
+    margin: 0;
+    position: absolute;
+    bottom: 20px;
 `
 const CardListButtonDelete = styled.button`
     width: 100%;
@@ -165,16 +188,27 @@ const CardListButtonDelete = styled.button`
         color: white;
     }
 `
+// const CardListDescription = styled.p`
+//     margin: 0;
+//     overflow: hidden;
+// `
 
 const CreateGiftList = ()=>{
     const [giftList, setGiftList] = useState("")
     const [modal, setModal] = useState("none")
+    const [editPriceModal, setEditPriceModal] = useState("none")
     
     function ShowModal(){
         setModal("flex")
     }
     function HiddenModal(){
         setModal("none")
+    }
+    function ShowModalEdit(){
+        setEditPriceModal("flex")
+    }
+    function HiddenModalEdit(){
+        setEditPriceModal("none")
     }
     async function getGifts(){
         try {
@@ -200,23 +234,86 @@ const CreateGiftList = ()=>{
     }
 
     async function deleteGift(id){
-        try {
-            const res = await petitions.deleteGiftById(id)
-            console.log(res)
-            getGifts()
-        } catch (error) {
-            
-        }
+        Swal.fire({
+            title: 'Estas seguro?',
+            text: "este regalo sera eliminado si aceptas",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#008080',
+            cancelButtonColor: '#ff6347',
+            confirmButtonText: 'Eliminar',
+            cancelButtonText: 'Cancelar'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Eliminando Regalo',
+                    html: 'esto puede tardar un poco dependiendo de tu internet',
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                    didOpen:async () => {
+                        Swal.showLoading()
+                        try {
+                            const res = await petitions.deleteGiftById(id)
+                            const date = await res.json()
+                            console.log(res)
+                            if(res.ok){
+                                Swal.fire({
+                                    title: 'Exito!',
+                                    text: date.message,
+                                    icon: 'success',
+                                    confirmButtonText: 'aceptar'
+                                })
+                                getGifts()
+                                return
+                            } else{
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'al parecer hubo un error con la autorizacion',
+                                    icon: 'error',
+                                    confirmButtonText: 'aceptar'
+                                })
+                            }
+                            
+                        } catch (error) {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'al parecer hubo un error con el servidor',
+                                icon: 'error',
+                                confirmButtonText: 'aceptar'
+                            })
+                        }
+                    },
+                })
+            }
+          })
         
     }
-
+    // ! POST DEFUALT GIFT CHANGE THE EVENT_ID 
+    async function postDefaultGift(id){
+        // console.log(id)
+        let data
+        giftsDefault.forEach((e,i)=>{
+            if(i === id){
+                data = {
+                    ...e,
+                    evento_id:1
+                }
+            }
+        })
+        const res = await petitions.postDefaultGifts(data)
+        const response = await res.json()
+        console.log(response)
+        getGifts()
+    }
+    // console.log(giftsDefault)
     useEffect(()=>{
         getGifts()
         console.log(giftList)
     },[])
     return(
         <Container>
-            <AddGiftModal modal={modal} HiddenModal={HiddenModal}></AddGiftModal>
+            <GiftDefaultEditModal editPriceModal={editPriceModal} HiddenModalEdit={HiddenModalEdit}/>
+            <AddGiftModal modal={modal} HiddenModal={HiddenModal} getGifts={getGifts}></AddGiftModal>
             <Title1>
                 <h2>crea tu lista de regalos</h2>
             </Title1>
@@ -248,19 +345,24 @@ const CreateGiftList = ()=>{
                         <h4>Crear nuevo regalo</h4>
                     </AddCardGift>
                     {/* ForEach disable this when the user add the card default */}
-                    <CardGiftDefault>
-                        <CardDefaultLeftContainer>
-                            <img src="https://hogarimagen.com/wp-content/uploads/2019/03/Sillon-para-dormitorio-N%C3%B3rdica-color-negro.png" alt="" />
-                        </CardDefaultLeftContainer>
-                        <CardDefaultRightContainer >
-                            <div style={{width:"100%", display:"flex",gap:"20px"}}>
-                                <ButtonGiftDefault style={{width:"50%"}}>Editar</ButtonGiftDefault>
-                                <ButtonGiftDefault style={{width:"50%"}}>Agregar</ButtonGiftDefault>
-                            </div>
-                            <CardDefaultTitle>Sillón Nórdica Negro – RIO</CardDefaultTitle>
-                            <CardDefaultPrice>s/700</CardDefaultPrice>
-                        </CardDefaultRightContainer>
-                    </CardGiftDefault>
+                    {giftsDefault && giftsDefault.map((e,i) =>{
+                        return(
+                            <CardGiftDefault key={i}>
+                                <CardDefaultLeftContainer>
+                                    <img src={e.img_regalo} alt={e.descripcion} />
+                                </CardDefaultLeftContainer>
+                                <CardDefaultRightContainer >
+                                    <div style={{width:"100%", display:"flex",gap:"20px"}}>
+                                        <ButtonGiftDefault style={{width:"50%"}} onClick={ShowModalEdit}>Editar</ButtonGiftDefault>
+                                        <ButtonGiftDefault onClick={()=>postDefaultGift(i)} style={{width:"50%"}}>Agregar</ButtonGiftDefault>
+                                    </div>
+                                    <CardDefaultTitle>{e.nombre}</CardDefaultTitle>
+                                    <CardDefaultPrice>s/{e.precio}</CardDefaultPrice>
+                                </CardDefaultRightContainer>
+                            </CardGiftDefault>
+                        )
+                    })}
+                    
                     
                 </GiftsDefault>
             </GiftsContainer>

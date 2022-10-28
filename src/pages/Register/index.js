@@ -148,8 +148,6 @@ const Register = () => {
 			});
 		}
 
-		console.log(datos);
-        console.log(validacion);
 	};
 
 	const enviarDatos = async (event) => {

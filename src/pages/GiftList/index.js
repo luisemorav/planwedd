@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import GiftPayModal from '../../components/GiftPayModal'
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import petitions from "../../api";
+import { Link ,useParams } from "react-router-dom";
+// import {  } from "react-router-dom";
 const AllContainer = styled.div`
     width: 100%;
     height: 100vh;
@@ -106,13 +107,33 @@ const ButtonPrice = styled.div`
     width: 100%;
     user-select: none;
 `
-
+const ReturBottom = styled.div`
+    width: 50px;
+    height: 50px;
+    background-color: white;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    font-size: 2rem;
+    border-radius: 50%;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    transition: background, color, transform, .3s;
+    &:hover{
+        background-color: lightgreen;
+        color: white;
+        transform: scale(1.2);
+    }
+`
 const GiftList = ()=>{
     const [background, setBackground] = useState("")
     const [modalData, setModalData] = useState("")
     const [giftsList, setGiftsList] = useState("")
-
+    const [giftId, setGiftId] = useState(0)
     const {id,userId} = useParams()
+    // const userId = useParams()
 
     async function getGifts(){
         const res = await petitions.getGiftsByEventId(id) 
@@ -120,28 +141,28 @@ const GiftList = ()=>{
         if(res.status === 200){
             let gifts = []
             data.forEach(e=>{
-                // setGiftsList(data)
                 if(e.status === true){
                     gifts.push(e)
                 }
-                // console.log(e.status)
             })
             setGiftsList(gifts)
             return
         }
     }
     async function getBackground(){
-        console.log(userId)
         const res = await petitions.getEventByIdUser(userId)
         const {data} = await res.json()
         if(res.status === 200){
             setBackground(data[0].img_portada)
         }
     }
+    // function ReturnLastPage(){
 
+    // }
 
     const [showGiftModal, SetShowGiftModal] = useState("none")
     function showModal(id){
+        setGiftId(id)
         giftsList.forEach(element => {
             if(element.id === id){
                 setModalData(element)
@@ -158,7 +179,15 @@ const GiftList = ()=>{
     },[])
     return(
         <AllContainer>
-            <GiftPayModal showGiftModal={showGiftModal} hiddenGiftModal={hiddenGiftModal} modalData={modalData}></GiftPayModal>
+             <Link 
+             to={"/event/" + userId} 
+             style={{textDecoration:"none",color:"rgba(0,0,0,0.8)"}}
+             >
+                <ReturBottom>
+                    <i className="fa-solid fa-arrow-left"></i>
+                </ReturBottom>
+            </Link>
+            <GiftPayModal getGifts={getGifts} giftId={giftId} showGiftModal={showGiftModal} hiddenGiftModal={hiddenGiftModal} modalData={modalData}></GiftPayModal>
             <ContainerBanner style={{backgroundImage:`url('${background}')`}} />
 
             <Container>
@@ -174,6 +203,7 @@ const GiftList = ()=>{
                                         <TitleCard1>{e.nombre}</TitleCard1>
                                         <ButtonsCard>
                                             <ButtonPrice>s/{e.precio}</ButtonPrice>
+                                            {/* <ButtonPrice>{e.id}</ButtonPrice> */}
                                             <ButtonCard onClick={()=>showModal(e.id)}>regalar</ButtonCard>
                                         </ButtonsCard>
                                     </DescriptionCard>

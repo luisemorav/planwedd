@@ -154,7 +154,26 @@ const TitlesContainer = styled.div`
 		width: 80%;
 	}
 `;
-
+const ReturBottom = styled.div`
+    width: 50px;
+    height: 50px;
+    background-color: white;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    font-size: 2rem;
+    border-radius: 50%;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    transition: background, color, transform, .3s;
+    &:hover{
+        background-color: lightgreen;
+        color: white;
+        transform: scale(1.2);
+    }
+`
 const Event = () => {
 	let {id} = useParams();
 
@@ -207,6 +226,14 @@ const Event = () => {
 
 	return (
 		<Container>
+			<Link 
+             to={"/"} 
+             style={{textDecoration:"none",color:"rgba(0,0,0,0.8)"}}
+             >
+                <ReturBottom>
+                    <i className="fa-solid fa-arrow-left"></i>
+                </ReturBottom>
+            </Link>
 			<ContainerBanner
 				style={{
 					backgroundImage: `url(${event.img_portada})`,
@@ -220,20 +247,10 @@ const Event = () => {
 				</ContainerTitle>
 				<ContainerInformation>
 					<Information>
-						<TitleMini>Lugar del evento</TitleMini>
-						<SubTitle>
-							Av 22 de Julio Mz T Lt 24 - Asoc Fortaleza de
-							Vitarte
-						</SubTitle>
 						<TitleMini>Fecha</TitleMini>
 						<SubTitle>
 							{event.fecha_evento}
 						</SubTitle>
-						<TitleMini>Comprometidos</TitleMini>
-						<UlContainer>
-							<li>Pedro Aguilar Condor</li>
-							<li>Angela Guitierrez Villanueva</li>
-						</UlContainer>
 					</Information>
 					<Buttons>
 						<Link to={`/event/${event.usuario_id}/gifts/` + event.id} style={{textDecoration:"none"}}>

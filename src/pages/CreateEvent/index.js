@@ -1,12 +1,18 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import UserContext from "../../context/UserContext";
 import "./master.css";
 
 const CreateEvent = () => {
-	const [username, setUsername] = useState("Nombre Apellido");
+	const { user, logout } = useContext(UserContext);
+
+    const navigate = useNavigate()
 
 	const [imgpreview, setImgpreview] = useState(
 		"https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
 	);
+
+	const [img, setImg] = useState();
 
 	const [imgsize, setImgsize] = useState(0);
 
@@ -28,22 +34,100 @@ const CreateEvent = () => {
 		titular: "",
 	});
 
+	const handleInputChange = (event) => {
+		if (
+			event.target.name === "banco" ||
+			event.target.name === "nro_cuenta" ||
+			event.target.name === "titular"
+		) {
+			setDatosB({
+				...datosB,
+				[event.target.name]: event.target.value,
+			});
+		} else if (
+			event.target.name === "primary" ||
+			event.target.name === "secondary"
+		) {
+			setColorconfig({
+				...colorconfig,
+				[event.target.name]: event.target.value,
+			});
+			setDatosE({
+				...datosE,
+				configuraciones: JSON.stringify(colorconfig),
+			});
+		} else {
+			setDatosE({
+				...datosE,
+				[event.target.name]: event.target.value,
+				configuraciones: JSON.stringify(colorconfig),
+			});
+		}
+	};
+
 	const renderImage = (inputFile) => {
 		const image = URL.createObjectURL(inputFile.target.files[0]);
 		setImgpreview(image);
+		setImg(inputFile.target.files[0]);
 		setImgsize(inputFile.target.files[0].size);
-		console.log(imgsize / 1000000);
 	};
+
+	const enviarDatos = async (event) => {
+		event.preventDefault();
+
+		const formData = new FormData();
+
+		formData.set("nombre_evento", datosE.nombre_evento);
+		formData.set("fecha_evento", datosE.fecha_evento);
+		formData.set("texto_portada", datosE.texto_portada);
+		formData.set("img_portada", img);
+		formData.set("configuraciones", datosE.configuraciones);
+
+		try {
+			let config = {
+				method: "post",
+				headers: {
+					accept: "application/json",
+					Authorization: `Bearer ${user.access_token}`,
+					ContentType: "multipart/form-data",
+				},
+				body: formData,
+			};
+			let response = await fetch("http://127.0.0.1:5000/events", config);
+			let json = await response.json();
+			console.log(json);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+    const logOut = () => {
+        logout()
+        navigate('/login')
+    }
+
+    const logIn = () => {
+        navigate('/login')
+    }
 
 	return (
 		<div className="_backgroundImage _fontWeight600">
 			<div className="card _backgroundOpacity p-3">
 				<div className="d-flex justify-content-between">
 					<h4>
-						Bienvenido <strong>{username}</strong>, crea o edita tu
-						evento en el formulario de abajo.
+						Bienvenido{" "}
+						<strong>
+							{user
+								? `${user.nombres}`
+								: ", para comenzar inicia sesión"}
+						</strong>
+						, crea o edita tu evento en el formulario de abajo.
 					</h4>
-					<button>Cerrar Sesión</button>
+					{user ? (
+						<button onClick={logOut}>Cerrar Sesión</button>
+					) : (
+						<button onClick={logIn}>Iniciar Sesión</button>
+					)}
 				</div>
 			</div>
 			<div className="container _containerCentral p-3">
@@ -59,10 +143,12 @@ const CreateEvent = () => {
 										Nombre del evento
 									</label>
 									<input
+										name="nombre_evento"
 										type="text"
 										id="nombre"
 										placeholder="Escribe aqui el nombre de tu evento. Ej. Paco & Lulu..."
-										className="form-control form-control-lg"></input>
+										className="form-control form-control-lg"
+										onChange={handleInputChange}></input>
 								</div>
 								<div className="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 									<label
@@ -71,9 +157,11 @@ const CreateEvent = () => {
 										Fecha del evento
 									</label>
 									<input
+										name="fecha_evento"
 										type="date"
 										id="fecha"
-										className="form-control form-control-lg"></input>
+										className="form-control form-control-lg"
+										onChange={handleInputChange}></input>
 								</div>
 							</div>
 
@@ -85,10 +173,12 @@ const CreateEvent = () => {
 										Mensaje de bienvenida
 									</label>
 									<textarea
+										name="texto_portada"
 										id="mensaje"
 										rows="11"
 										placeholder="Escribe aqui el mensaje de bienvenida quelos invitados puedan leer en tu perfil..."
-										className="form-control"></textarea>
+										className="form-control"
+										onChange={handleInputChange}></textarea>
 								</div>
 
 								<div className="_padTop10 col-lg-4 col-md-4 col-sm-12 col-xs-12">
@@ -125,6 +215,8 @@ const CreateEvent = () => {
 									<input
 										className="form-control form-control-sm"
 										type="color"
+										name="primary"
+										onInput={handleInputChange}
 										id="color1"
 										defaultValue={"#ffcda9"}
 									/>
@@ -140,6 +232,8 @@ const CreateEvent = () => {
 									<input
 										className="form-control form-control-sm"
 										type="color"
+										name="secondary"
+										onInput={handleInputChange}
 										id="color2"
 										defaultValue={"#ffbd59"}
 									/>
@@ -166,16 +260,22 @@ const CreateEvent = () => {
 														className="form-label _fontSize13">
 														Banco
 													</label>
-													<select className="form-select form-select-sm">
-														<option
-															disabled
-															selected>
+													<select
+														defaultValue={
+															"Seleccione..."
+														}
+														name="banco"
+														className="form-select form-select-sm"
+														onChange={
+															handleInputChange
+														}>
+														<option disabled>
 															Seleccione...
 														</option>
 														<option value="BCP">
 															BCP
 														</option>
-														<option value="Internank">
+														<option value="Interbank">
 															Interbank
 														</option>
 														<option value="BBVA">
@@ -201,7 +301,11 @@ const CreateEvent = () => {
 													</label>
 													<input
 														type="text"
+														name="titular"
 														id="cuenta"
+														onChange={
+															handleInputChange
+														}
 														placeholder="Escribe aqui el nombre del titular de la cuenta..."
 														className="form-control form-control-sm"></input>
 												</div>
@@ -214,8 +318,12 @@ const CreateEvent = () => {
 													</label>
 													<input
 														type="text"
+														name="nro_cuenta"
 														id="CCI"
 														placeholder="215-..."
+														onChange={
+															handleInputChange
+														}
 														className="form-control form-control-sm"></input>
 												</div>
 											</div>
@@ -228,8 +336,9 @@ const CreateEvent = () => {
 								<div className="_padTop10 text-center col-lg-12 col-md-12 col-sm-12 col-xs-12">
 									<button
 										type="button"
+										onClick={enviarDatos}
 										className="_textButton col-white btn btn-info btn-lg">
-										Crear evento
+										Guardar Cambios
 									</button>
 								</div>
 							</div>

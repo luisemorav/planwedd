@@ -1,7 +1,8 @@
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ButtonLink from "../../components/MainComponents/ButtonLink";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import UserContext from "../../context/UserContext";
 const Container = styled.div`
 	background-color: white;
 	background: url("https://images.pexels.com/photos/1295994/pexels-photo-1295994.jpeg");
@@ -57,7 +58,6 @@ const CardRegister = styled.div`
 	flex-direction: column;
 	justify-content: center;
 	gap: 10px;
-
 	border-radius: 10px;
 	background-color: #96d9ff;
 	background: linear-gradient(
@@ -109,7 +109,9 @@ const LinkStyled = styled(Link)`
 	text-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 `;
 
-const Register = () => {
+const Login = () => {
+	const { user, login } = useContext(UserContext);
+
 	const [datos, setDatos] = useState({
 		username: "",
 		password: "",
@@ -117,20 +119,14 @@ const Register = () => {
 
 	const [msgerr, setMsgerr] = useState("");
 
-    const navigate = useNavigate()
+	const navigate = useNavigate();
 
-	if (localStorage.getItem("planweddlogin")) {
-        return <Navigate to="/createevent"/>
+	if (user) {
+		return <Navigate to="/createevent" />;
 	}
-
-	// useEffect(() => {
-	//     let token = JSON.parse(localStorage.getItem('planweddlogin') || {})
-	//     if (token['access_token']) {
-	//         console.log(token['data']['id'])
-	//     } else {
-	//         console.log('inicia sesion')
-	//     }
-	// }, [])
+	// if (localStorage.getItem("planweddlogin")) {
+	//     return <Navigate to="/createevent"/>
+	// }
 
 	const handleInputChange = (event) => {
 		setDatos({
@@ -138,7 +134,6 @@ const Register = () => {
 			[event.target.name]: event.target.value,
 		});
 	};
-    
 
 	const enviarDatos = async (event) => {
 		event.preventDefault();
@@ -167,11 +162,13 @@ const Register = () => {
 				let session = {
 					access_token: json["access_token"],
 					refresh_token: json["refresh_token"],
-					data: user["data"],
-					login: true,
+					id: user["data"]["id"],
+					nombres: user["data"]["nombres"],
+					apellidos: user["data"]["apellidos"],
 				};
+				login(session);
 				localStorage.setItem("planweddlogin", JSON.stringify(session));
-                navigate('/createevent')
+				navigate("/createevent");
 			} else {
 				setMsgerr(json.error);
 			}
@@ -224,4 +221,4 @@ const Register = () => {
 	);
 };
 
-export default Register;
+export default Login;
