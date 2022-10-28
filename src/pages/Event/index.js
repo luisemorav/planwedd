@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import petitions from "../../api";
 
@@ -17,13 +16,10 @@ const ContainerBanner = styled.div`
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center;
-
 `;
 const ContainerDescription = styled.div`
 	width: 100%;
 	height: calc(100% - 35%);
-	/* padding-top: 30px; */
-	/* border-top: 2px solid #C6C6C8; */
 	border-bottom: 2px solid #c6c6c8;
 	display: flex;
 	flex-direction: column;
@@ -110,7 +106,6 @@ const CardContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
-	/* background-color: red; */
 `;
 const Cards = styled.div`
 	width: 100%;
@@ -159,51 +154,67 @@ const TitlesContainer = styled.div`
 		width: 80%;
 	}
 `;
-
+const ReturBottom = styled.div`
+	width: 50px;
+	height: 50px;
+	background-color: white;
+	position: absolute;
+	top: 20px;
+	left: 20px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 2rem;
+	border-radius: 50%;
+	box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+	transition: background, color, transform, 0.3s;
+	&:hover {
+		background-color: lightgreen;
+		color: white;
+		transform: scale(1.2);
+	}
+`;
 const Event = () => {
-	let {id} = useParams();
+	let { id } = useParams();
 
 	const [event, setEvent] = useState([]);
-	const [dedications, setDedications] = useState('');
+	const [dedications, setDedications] = useState("");
 
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		cargarEvento();
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const cargarEvento = async () => {
 		try {
-			const res = await petitions.getEventByIdUser(id)
-			console.log(res)
+			const res = await petitions.getEventByIdUser(id);
+			console.log(res);
 			let eventData = await res.json();
 			if (res.status === 200) {
 				setEvent(eventData.data[0]);
-				const eventId = eventData.data[0].id
-				cargarDedicatorias(eventId)
-				return
-				
+				const eventId = eventData.data[0].id;
+				cargarDedicatorias(eventId);
+				return;
 			} else if (res.status === 404) {
 				console.log(eventData["message"]);
 				navigate("/404");
-			} 
+			}
 		} catch (error) {
 			navigate("/404");
 			console.log(error);
 		}
 	};
 
-
 	const cargarDedicatorias = async (idEvent) => {
 		try {
-			
-			const res = await petitions.getDedicatoriasByEventID(idEvent)
+			const res = await petitions.getDedicatoriasByEventID(idEvent);
 			let dedicatoriasRaw = await res.json();
 			if (res.status === 200) {
 				let dedicatorias = dedicatoriasRaw["data"];
 				setDedications(dedicatorias);
-				return
+				return;
 			} else if (res.status === 404) {
 				setDedications("");
 			}
@@ -214,6 +225,13 @@ const Event = () => {
 
 	return (
 		<Container>
+			<Link
+				to={"/"}
+				style={{ textDecoration: "none", color: "rgba(0,0,0,0.8)" }}>
+				<ReturBottom>
+					<i className="fa-solid fa-arrow-left"></i>
+				</ReturBottom>
+			</Link>
 			<ContainerBanner
 				style={{
 					backgroundImage: `url(${event.img_portada})`,
@@ -227,23 +245,13 @@ const Event = () => {
 				</ContainerTitle>
 				<ContainerInformation>
 					<Information>
-						<TitleMini>Lugar del evento</TitleMini>
-						<SubTitle>
-							Av 22 de Julio Mz T Lt 24 - Asoc Fortaleza de
-							Vitarte
-						</SubTitle>
 						<TitleMini>Fecha</TitleMini>
-						<SubTitle>
-							{event.fecha_evento}
-						</SubTitle>
-						<TitleMini>Comprometidos</TitleMini>
-						<UlContainer>
-							<li>Pedro Aguilar Condor</li>
-							<li>Angela Guitierrez Villanueva</li>
-						</UlContainer>
+						<SubTitle>{event.fecha_evento}</SubTitle>
 					</Information>
 					<Buttons>
-						<Link to={`/event/${event.usuario_id}/gifts/` + event.id}>
+						<Link
+							to={`/event/${event.usuario_id}/gifts/` + event.id}
+							style={{ textDecoration: "none" }}>
 							<Button>
 								<i
 									style={{ fontSize: "4rem" }}
@@ -256,24 +264,26 @@ const Event = () => {
 			</ContainerDescription>
 			<ContainerDedicatorias>
 				<CardContainer>
-					{dedications ? 
-					<TitleMini>Dedicatorias</TitleMini>
-					: <TitleMini>No se encontraron dedicatorias</TitleMini>
-					}
+					{dedications ? (
+						<TitleMini>Dedicatorias</TitleMini>
+					) : (
+						<TitleMini>No se encontraron dedicatorias</TitleMini>
+					)}
 					<Cards>
 						{dedications &&
-						dedications.map((dedication, index) => {
-							return (
-								<Card key={index}>
-									<CardTitle>{dedication.nombre}</CardTitle>
-									<CardSubtitle>
-										{dedication.contenido}
-									</CardSubtitle>
-									<CardTime>09/10/2022</CardTime>
-								</Card>
-							);
-						})
-						} 
+							dedications.map((dedication, index) => {
+								return (
+									<Card key={index}>
+										<CardTitle>
+											{dedication.nombre}
+										</CardTitle>
+										<CardSubtitle>
+											{dedication.contenido}
+										</CardSubtitle>
+										<CardTime>09/10/2022</CardTime>
+									</Card>
+								);
+							})}
 					</Cards>
 				</CardContainer>
 			</ContainerDedicatorias>

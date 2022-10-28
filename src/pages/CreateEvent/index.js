@@ -43,12 +43,11 @@ const CreateEvent = () => {
 	const cargarEvento = async () => {
 		try {
 			const res = await petitions.getEventByIdUser(user.id);
-			// console.log(res);
+			
 			let eventData = await res.json();
 			if (res.status === 200) {
 				setExistEvent(true);
 
-				// console.log(eventData);
 				setEvent(eventData.data[0]);
 
 				setPrimaryColor(
@@ -73,7 +72,6 @@ const CreateEvent = () => {
 				console.log(eventData["message"]);
 			}
 		} catch (error) {
-			// navigate("/404");
 			console.log(error);
 		}
 	};
