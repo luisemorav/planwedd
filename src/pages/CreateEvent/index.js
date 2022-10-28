@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import petitions from "../../api";
+import Swal from "sweetalert2";
 import UserContext from "../../context/UserContext";
 import "./master.css";
 
@@ -175,55 +176,93 @@ const CreateEvent = () => {
 	const enviarDatos = async (event) => {
 		event.preventDefault();
 
-		const formData = new FormData();
+		Swal.fire({
+			title: "Estas seguro?",
+			text: "Los campos de imagen no se podran modificar posteriormente.",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#008080",
+			cancelButtonColor: "#ff6347",
+			confirmButtonText: "Crear Evento",
+			cancelButtonText: "Cancelar",
+		}).then((result) => {
+			if (result.isConfirmed) {
+				Swal.fire({
+					title: "Creando Evento",
+					html: "Se está creando tu evento.",
+					timerProgressBar: true,
+					showConfirmButton: false,
+					didOpen: async () => {
+						Swal.showLoading();
+						
+						const formData = new FormData();
 
-		formData.set("nombre_evento", datosE.nombre_evento);
-		formData.set("fecha_evento", datosE.fecha_evento);
-		formData.set("texto_portada", datosE.texto_portada);
-		formData.set("img_portada", img);
-		formData.set("configuraciones", datosE.configuraciones);
+						formData.set("nombre_evento", datosE.nombre_evento);
+						formData.set("fecha_evento", datosE.fecha_evento);
+						formData.set("texto_portada", datosE.texto_portada);
+						formData.set("img_portada", img);
+						formData.set("configuraciones", datosE.configuraciones);
 
-		try {
-			let config = {
-				method: "post",
-				headers: {
-					accept: "application/json",
-					Authorization: `Bearer ${user.access_token}`,
-					ContentType: "multipart/form-data",
-				},
-				body: formData,
-			};
-			let response = await fetch("http://127.0.0.1:5000/events", config);
-			let json = await response.json();
-			console.log(json);
-		} catch (error) {
-			console.log(error);
-		}
+						try {
+							let config = {
+								method: "post",
+								headers: {
+									accept: "application/json",
+									Authorization: `Bearer ${user.access_token}`,
+									ContentType: "multipart/form-data",
+								},
+								body: formData,
+							};
+							let response = await fetch("http://127.0.0.1:5000/events", config);
+							let json = await response.json();
+							console.log(json);
+							Swal.fire({
+								title: "Exito!",
+								text: "Se creó tu evento correctamente",
+								icon: "success",
+								confirmButtonText: "aceptar",
+							});
+						} catch (error) {
+							console.log(error);
+							Swal.fire({
+								title: "Error!",
+								text: "Al parecer hubo un error con la autorizacion",
+								icon: "error",
+								confirmButtonText: "aceptar",
+							});
+						}
 
-		try {
-			let config = {
-				method: "post",
-				headers: {
-					accept: "application/json",
-					Authorization: `Bearer ${user.access_token}`,
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(datosB),
-			};
-			let response = await fetch(
-				"http://127.0.0.1:5000/baccounts",
-				config
-			);
-			let json = await response.json();
-			console.log(json);
-		} catch (error) {
-			console.log(error);
-		}
+						try {
+							let config = {
+								method: "post",
+								headers: {
+									accept: "application/json",
+									Authorization: `Bearer ${user.access_token}`,
+									"Content-Type": "application/json",
+								},
+								body: JSON.stringify(datosB),
+							};
+							let response = await fetch(
+								"http://127.0.0.1:5000/baccounts",
+								config
+							);
+							let json = await response.json();
+							console.log(json);
+						} catch (error) {
+							console.log(error);
+						}
+
+					},
+				});
+			}
+		});
+
+		
 	};
 
 	const actualizarDatos = async (event) => {
 		event.preventDefault();
-
+		Swal.showLoading();
 		try {
 			let config = {
 				method: "put",
@@ -240,6 +279,11 @@ const CreateEvent = () => {
 			);
 			let json = await response.json();
 			console.log(json.messsage);
+			Swal.fire(
+				'Listo!',
+				'Se guardaron los cambios correctamente',
+				'success'
+			  )
 		} catch (error) {
 			console.log(error);
 		}
@@ -275,6 +319,10 @@ const CreateEvent = () => {
 
 	const logIn = () => {
 		navigate("/login");
+	};
+
+	const cargarLista = () => {
+		navigate("/createGift")
 	};
 
 	if (!user) {
@@ -571,6 +619,7 @@ const CreateEvent = () => {
 									{existEvent ? (
 										<button
 											type="button"
+											onClick={cargarLista}
 											className="ms-5 _textButton col-white btn btn-info btn-lg">
 											Lista de Regalos
 										</button>
