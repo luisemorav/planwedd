@@ -169,7 +169,7 @@ const ReturBottom = styled.div`
 	}
 `;
 const Event = () => {
-	
+
 	let { id } = useParams();
 
 	const [event, setEvent] = useState([]);
@@ -225,7 +225,7 @@ const Event = () => {
 				},
 			};
 
-			const res = await fetch(`${URLf}/dedications/event${id}`, config);
+			const res = await fetch(`${URLf}/dedications/event${idEvent}`, config);
 			let dedicatoriasRaw = await res.json();
 
 			if (res.status === 200) {
