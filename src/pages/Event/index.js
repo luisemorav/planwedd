@@ -209,6 +209,7 @@ const Event = () => {
 				return;
 			} else if (res.status === 404) {
 				console.log(eventData["message"]);
+				navigate("/404");
 			}
 		} catch (error) {
 			navigate("/404");
