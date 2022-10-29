@@ -2,6 +2,8 @@ import styled from "styled-components"
 import { useState} from "react"
 import petitions from "../../api"
 import Swal from "sweetalert2"
+import { useContext } from "react"
+import UserContext from "../../context/UserContext";
 // import {}
 const Container = styled.div`
     width: 100%;
@@ -88,10 +90,13 @@ const EquitButton = styled.div`
     }
 `
 const AddGiftModal = ({modal , HiddenModal, getGifts})=>{
+    const { user, myEvent } = useContext(UserContext);
+    const eventId = myEvent.event_id
+    const token = user.access_token
     const [imgDefault, setImgDefault] = useState("https://www.suzukijember.com/gallery/gambar_product/default.jpg")
     const [imgDefaultSize, setImgDefaultSize] = useState("0.00")
     const [img, setImg] = useState("")
-
+    // console.log("user =>"+ user.access_token)
     function handleImg(e){
         setImg(e.target.files[0])
         const urlImg = URL.createObjectURL(e.target.files[0])
@@ -111,11 +116,12 @@ const AddGiftModal = ({modal , HiddenModal, getGifts})=>{
         formData.append("img_regalo",img)
         formData.append("precio",precio)
         formData.append("descripcion",descripcion)
-        formData.append("evento_id",1)
+        formData.append("evento_id",eventId)
         petition(formData)
         
     }
     async function petition(data){
+        // console.log()
         Swal.fire({
             title: 'Subiendo Regalo!',
             html: 'esto puede tardar un poco dependiendo de tu internet',
@@ -124,7 +130,7 @@ const AddGiftModal = ({modal , HiddenModal, getGifts})=>{
             didOpen:async () => {
                 Swal.showLoading()
                 try {
-                    const res = await petitions.postGiftByEventId(data)
+                    const res = await petitions.postGiftByEventId(data,token)
                     const date = await res.json()
                     console.log(res)
                     if(res.ok){

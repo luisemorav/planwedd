@@ -6,6 +6,10 @@ import AddGiftModal from '../../components/AddGiftModal'
 import Swal from "sweetalert2";
 import GiftDefaultEditModal from '../../components/GiftDefaultEditModal'
 import giftsDefault from '../../api/giftsDefaults'
+
+import { useContext } from "react";
+import UserContext from "../../context/UserContext";
+
 const Container = styled.div`
     width: 100%;
     height: 100vh;
@@ -194,6 +198,9 @@ const CardListButtonDelete = styled.button`
 // `
 
 const CreateGiftList = ()=>{
+    const { myEvent, user  } = useContext(UserContext);
+    const idEvent = myEvent.event_id
+    const token = user.access_token
     const [giftList, setGiftList] = useState("")
     const [modal, setModal] = useState("none")
     const [editPriceModal, setEditPriceModal] = useState("none")
@@ -212,7 +219,7 @@ const CreateGiftList = ()=>{
     }
     async function getGifts(){
         try {
-            const res = await petitions.getGiftsByEventId(1)
+            const res = await petitions.getGiftsByEventId(idEvent)
             const {data} = await res.json()
             if(res.status === 200){
                 const gifts = []
@@ -290,17 +297,16 @@ const CreateGiftList = ()=>{
     }
     // ! POST DEFUALT GIFT CHANGE THE EVENT_ID 
     async function postDefaultGift(id){
-        // console.log(id)
         let data
         giftsDefault.forEach((e,i)=>{
             if(i === id){
                 data = {
                     ...e,
-                    evento_id:1
+                    evento_id:idEvent
                 }
             }
         })
-        const res = await petitions.postDefaultGifts(data)
+        const res = await petitions.postDefaultGifts(data,token)
         const response = await res.json()
         console.log(response)
         getGifts()

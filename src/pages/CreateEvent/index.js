@@ -1,22 +1,31 @@
 import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import petitions from "../../api";
+import Swal from "sweetalert2";
 import UserContext from "../../context/UserContext";
 import "./master.css";
 
 const CreateEvent = () => {
-	const { user, logout } = useContext(UserContext);
+	const { user, logout, loadEvent } = useContext(UserContext);
 
 	const [evento, setEvent] = useState();
 
+	const [cuenta, setCuenta] = useState();
+
 	const [existEvent, setExistEvent] = useState(false);
+
+	const [existCuenta, setExistCuenta] = useState(false);
 
 	const [primaryColor, setPrimaryColor] = useState("#ffcda9");
 	const [secondaryColor, setSecondaryColor] = useState("#ffbd59");
 
+	const [linkEvento, setLinkEvento] = useState(window.location.host);
+
 	const navigate = useNavigate();
 
-	const [imgpreview, setImgpreview] = useState("");
+	const [imgpreview, setImgpreview] = useState(
+		"https://artsmidnorthcoast.com/wp-content/uploads/2014/05/no-image-available-icon-6.png"
+	);
 
 	const [img, setImg] = useState();
 
@@ -38,17 +47,17 @@ const CreateEvent = () => {
 		banco: "",
 		nro_cuenta: "",
 		titular: "",
+		usuario_id: user.id,
 	});
 
 	const cargarEvento = async () => {
 		try {
 			const res = await petitions.getEventByIdUser(user.id);
-			// console.log(res);
+
 			let eventData = await res.json();
 			if (res.status === 200) {
 				setExistEvent(true);
 
-				// console.log(eventData);
 				setEvent(eventData.data[0]);
 
 				setPrimaryColor(
@@ -68,12 +77,55 @@ const CreateEvent = () => {
 					configuraciones: eventData.data[0]["configuraciones"],
 				});
 
+				let mievento = {
+					event_id: eventData.data[0]["id"]
+				}
+				loadEvent(mievento)
+
+				if (user.cuenta_id !== null) {
+					cargarCuenta();
+				}
+
 				return;
 			} else if (res.status === 404) {
 				console.log(eventData["message"]);
 			}
 		} catch (error) {
-			// navigate("/404");
+			console.log(error);
+		}
+	};
+
+	const cargarCuenta = async () => {
+		try {
+			let config = {
+				method: "GET",
+				headers: {
+					accept: "application/json",
+					Authorization: `Bearer ${user.access_token}`,
+					"Content-Type": "application/json",
+				},
+			};
+			let res = await fetch(
+				`http://127.0.0.1:5000/baccounts/${user.cuenta_id}`,
+				config
+			);
+			let cuentaData = await res.json();
+			if (res.status === 200) {
+				setDatosB({
+					banco: cuentaData.data["banco"],
+					nro_cuenta: cuentaData.data["nro_cuenta"],
+					titular: cuentaData.data["titular"],
+					usuario_id: cuentaData.data["usuario"]["id"],
+				});
+
+				setExistCuenta(true);
+
+				setCuenta(cuentaData.data);
+				return;
+			} else if (res.status === 404) {
+				console.log(cuentaData["message"]);
+			}
+		} catch (error) {
 			console.log(error);
 		}
 	};
@@ -129,35 +181,93 @@ const CreateEvent = () => {
 	const enviarDatos = async (event) => {
 		event.preventDefault();
 
-		const formData = new FormData();
+		Swal.fire({
+			title: "Estas seguro?",
+			text: "Los campos de imagen no se podran modificar posteriormente.",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#008080",
+			cancelButtonColor: "#ff6347",
+			confirmButtonText: "Crear Evento",
+			cancelButtonText: "Cancelar",
+		}).then((result) => {
+			if (result.isConfirmed) {
+				Swal.fire({
+					title: "Creando Evento",
+					html: "Se está creando tu evento.",
+					timerProgressBar: true,
+					showConfirmButton: false,
+					didOpen: async () => {
+						Swal.showLoading();
+						
+						const formData = new FormData();
 
-		formData.set("nombre_evento", datosE.nombre_evento);
-		formData.set("fecha_evento", datosE.fecha_evento);
-		formData.set("texto_portada", datosE.texto_portada);
-		formData.set("img_portada", img);
-		formData.set("configuraciones", datosE.configuraciones);
+						formData.set("nombre_evento", datosE.nombre_evento);
+						formData.set("fecha_evento", datosE.fecha_evento);
+						formData.set("texto_portada", datosE.texto_portada);
+						formData.set("img_portada", img);
+						formData.set("configuraciones", datosE.configuraciones);
 
-		try {
-			let config = {
-				method: "post",
-				headers: {
-					accept: "application/json",
-					Authorization: `Bearer ${user.access_token}`,
-					ContentType: "multipart/form-data",
-				},
-				body: formData,
-			};
-			let response = await fetch("http://127.0.0.1:5000/events", config);
-			let json = await response.json();
-			console.log(json);
-		} catch (error) {
-			console.log(error);
-		}
+						try {
+							let config = {
+								method: "post",
+								headers: {
+									accept: "application/json",
+									Authorization: `Bearer ${user.access_token}`,
+									ContentType: "multipart/form-data",
+								},
+								body: formData,
+							};
+							let response = await fetch("http://127.0.0.1:5000/events", config);
+							let json = await response.json();
+							console.log(json);
+							Swal.fire({
+								title: "Exito!",
+								text: "Se creó tu evento correctamente",
+								icon: "success",
+								confirmButtonText: "aceptar",
+							});
+						} catch (error) {
+							console.log(error);
+							Swal.fire({
+								title: "Error!",
+								text: "Al parecer hubo un error con la autorizacion",
+								icon: "error",
+								confirmButtonText: "aceptar",
+							});
+						}
+
+						try {
+							let config = {
+								method: "post",
+								headers: {
+									accept: "application/json",
+									Authorization: `Bearer ${user.access_token}`,
+									"Content-Type": "application/json",
+								},
+								body: JSON.stringify(datosB),
+							};
+							let response = await fetch(
+								"http://127.0.0.1:5000/baccounts",
+								config
+							);
+							let json = await response.json();
+							console.log(json);
+						} catch (error) {
+							console.log(error);
+						}
+
+					},
+				});
+			}
+		});
+
+		
 	};
 
 	const actualizarDatos = async (event) => {
 		event.preventDefault();
-
+		Swal.showLoading();
 		try {
 			let config = {
 				method: "put",
@@ -173,7 +283,35 @@ const CreateEvent = () => {
 				config
 			);
 			let json = await response.json();
-			console.log(json);
+			console.log(json.messsage);
+			Swal.fire(
+				'Listo!',
+				'Se guardaron los cambios correctamente',
+				'success'
+			  )
+		} catch (error) {
+			console.log(error);
+		}
+
+		try {
+			let datosB2 = datosB;
+			delete datosB2.usuario_id;
+
+			let config = {
+				method: "put",
+				headers: {
+					accept: "application/json",
+					Authorization: `Bearer ${user.access_token}`,
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(datosB2),
+			};
+			let response = await fetch(
+				`http://127.0.0.1:5000/baccounts/${user.cuenta_id}`,
+				config
+			);
+			let json = await response.json();
+			console.log(json.messsage);
 		} catch (error) {
 			console.log(error);
 		}
@@ -186,6 +324,11 @@ const CreateEvent = () => {
 
 	const logIn = () => {
 		navigate("/login");
+	};
+
+	const cargarLista = () => {
+		
+		navigate("/createGift")
 	};
 
 	if (!user) {
@@ -206,7 +349,11 @@ const CreateEvent = () => {
 						, crea o edita tu evento en el formulario de abajo.
 					</h4>
 					{user ? (
-						<button onClick={logOut}>Cerrar Sesión</button>
+						<button
+							onClick={logOut}
+							className="_textButton col-white btn btn-info">
+							Cerrar Sesión
+						</button>
 					) : (
 						<button onClick={logIn}>Iniciar Sesión</button>
 					)}
@@ -216,6 +363,12 @@ const CreateEvent = () => {
 				<h1 className="text-center">
 					{existEvent ? "Edita tu Evento" : "Crea tu Evento"}
 				</h1>
+				<h5 className="text-center">
+					Link de tu evento:
+					<strong>
+						{existEvent ? ` ${linkEvento}/event/${user.id}` : "-"}
+					</strong>
+				</h5>
 				<div className="card _backgroundOpacity">
 					<div className="card-body">
 						<div className="container">
@@ -376,9 +529,15 @@ const CreateEvent = () => {
 														onChange={
 															handleInputChange
 														}>
-														<option disabled>
-															Seleccione...
-														</option>
+														{existCuenta ? (
+															<option>
+																{cuenta.banco}
+															</option>
+														) : (
+															<option disabled>
+																Seleccione...
+															</option>
+														)}
 														<option value="BCP">
 															BCP
 														</option>
@@ -391,10 +550,10 @@ const CreateEvent = () => {
 														<option value="Scotiabank">
 															Scotiabank
 														</option>
-														<option value="Scotiabank">
+														<option value="Banbif">
 															Banbif
 														</option>
-														<option value="Scotiabank">
+														<option value="Banco de la Nación">
 															Banco de la Nación
 														</option>
 													</select>
@@ -414,7 +573,12 @@ const CreateEvent = () => {
 															handleInputChange
 														}
 														placeholder="Escribe aqui el nombre del titular de la cuenta..."
-														className="form-control form-control-sm"></input>
+														className="form-control form-control-sm"
+														defaultValue={
+															existCuenta
+																? cuenta.titular
+																: ""
+														}></input>
 												</div>
 
 												<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -431,7 +595,12 @@ const CreateEvent = () => {
 														onChange={
 															handleInputChange
 														}
-														className="form-control form-control-sm"></input>
+														className="form-control form-control-sm"
+														defaultValue={
+															existCuenta
+																? cuenta.nro_cuenta
+																: ""
+														}></input>
 												</div>
 											</div>
 										</div>
@@ -453,6 +622,16 @@ const CreateEvent = () => {
 											? "Guardar Cambios"
 											: "Crear Evento"}
 									</button>
+									{existEvent ? (
+										<button
+											type="button"
+											onClick={cargarLista}
+											className="ms-5 _textButton col-white btn btn-info btn-lg">
+											Lista de Regalos
+										</button>
+									) : (
+										""
+									)}
 								</div>
 							</div>
 						</div>
