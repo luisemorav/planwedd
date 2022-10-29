@@ -3,6 +3,7 @@ import styled from "styled-components";
 import ButtonLink from "../../components/MainComponents/ButtonLink";
 import { useContext, useState } from "react";
 import UserContext from "../../context/UserContext";
+import Swal from "sweetalert2";
 const Container = styled.div`
 	background-color: white;
 	background: url("https://images.pexels.com/photos/1295994/pexels-photo-1295994.jpeg");
@@ -118,8 +119,6 @@ const Login = () => {
 		password: "",
 	});
 
-	const [msgerr, setMsgerr] = useState("");
-
 	const navigate = useNavigate();
 
 	if (user) {
@@ -139,6 +138,7 @@ const Login = () => {
 	const enviarDatos = async (event) => {
 		event.preventDefault();
 		try {
+			Swal.showLoading();
 			let config = {
 				method: "POST",
 				headers: {
@@ -182,10 +182,22 @@ const Login = () => {
 					login(session);
 				}
 
-				// localStorage.setItem("planweddlogin", JSON.stringify(session));
+				Swal.fire({
+					title: "Sesión Iniciada!",
+					text: "Sesión iniciada con éxito.",
+					icon: "success",
+					showConfirmButton: false,
+					timer: 1300,
+				});
+
 				navigate("/createevent");
 			} else {
-				setMsgerr(json.error);
+				Swal.fire({
+					title: "Error!",
+					text: json.error,
+					icon: "error",
+					confirmButtonText: "aceptar",
+				});
 			}
 		} catch (error) {
 			console.log(error);
@@ -215,9 +227,6 @@ const Login = () => {
 						onChange={handleInputChange}
 						type={"password"}></InputForm>
 				</ContainerInput>
-				<p name="msgerror" style={{ color: "red" }}>
-					{msgerr}
-				</p>
 				<ContainerInput style={{ marginTop: "1px" }}>
 					<ButtonLink
 						type={"submit"}
