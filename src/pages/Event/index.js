@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import petitions from "../../api";
+import URLf from "../../api/config";
 
 const Container = styled.div`
 	width: 100%;
@@ -121,21 +122,21 @@ const CardTitle = styled.div`
 	width: 100%;
 	font-size: 1.3rem;
 	font-weight: 800;
-	color: rgba(0, 0, 0, 0.6);
+	color: rgb(0, 0, 0);
 	text-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
 `;
 const CardSubtitle = styled.div`
 	width: 100%;
 	font-size: 0.9rem;
 	font-weight: 800;
-	color: rgba(0, 0, 0, 0.5);
+	color: rgba(0, 0, 0, 0.7);
 	text-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
 `;
 const CardTime = styled.div`
 	width: 100%;
 	font-size: 0.8rem;
 	font-weight: 800;
-	color: rgba(0, 0, 0, 0.3);
+	color: rgba(0, 0, 0, 0.2);
 	text-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
 `;
 const TitlesContainer = styled.div`
@@ -168,10 +169,14 @@ const ReturBottom = styled.div`
 	}
 `;
 const Event = () => {
+	
 	let { id } = useParams();
 
 	const [event, setEvent] = useState([]);
 	const [dedications, setDedications] = useState("");
+
+	const [primary, setPrimary] = useState("");
+	const [secondary, setSecondary] = useState("");
 
 	const navigate = useNavigate();
 
@@ -187,12 +192,23 @@ const Event = () => {
 			let eventData = await res.json();
 			if (res.status === 200) {
 				setEvent(eventData.data[0]);
+
+				setPrimary(
+					JSON.parse(eventData.data[0]["configuraciones"])["primary"]
+				);
+				setSecondary(
+					JSON.parse(eventData.data[0]["configuraciones"])[
+						"secondary"
+					]
+				);
+
 				const eventId = eventData.data[0].id;
+
 				cargarDedicatorias(eventId);
+				
 				return;
 			} else if (res.status === 404) {
 				console.log(eventData["message"]);
-				navigate("/404");
 			}
 		} catch (error) {
 			navigate("/404");
@@ -202,14 +218,23 @@ const Event = () => {
 
 	const cargarDedicatorias = async (idEvent) => {
 		try {
-			const res = await petitions.getDedicatoriasByEventID(idEvent);
+			let config = {
+				method: "get",
+				headers: {
+					accept: "application/json",
+				},
+			};
+
+			const res = await fetch(`${URLf}/dedications/event${id}`, config);
 			let dedicatoriasRaw = await res.json();
+
 			if (res.status === 200) {
 				let dedicatorias = dedicatoriasRaw["data"];
 				setDedications(dedicatorias);
 				return;
 			} else if (res.status === 404) {
 				setDedications("");
+				return;
 			}
 		} catch (error) {
 			console.log(error);
@@ -244,10 +269,10 @@ const Event = () => {
 					<Buttons>
 						<Link
 							to={`/event/${event.usuario_id}/gifts/` + event.id}
-							style={{ textDecoration: "none" }}>
-							<Button>
+							style={{ textDecoration: "none"}}>
+							<Button style={{ backgroundColor: primary }} >
 								<i
-									style={{ fontSize: "4rem" }}
+									style={{ fontSize: "4rem"}}
 									className="fa-solid fa-gift"></i>
 								<SubTitle>Dejar Regalo</SubTitle>
 							</Button>
@@ -255,7 +280,7 @@ const Event = () => {
 					</Buttons>
 				</ContainerInformation>
 			</ContainerDescription>
-			<ContainerDedicatorias>
+			<ContainerDedicatorias style={{ backgroundColor: secondary }}>
 				<CardContainer>
 					{dedications ? (
 						<TitleMini>Dedicatorias</TitleMini>

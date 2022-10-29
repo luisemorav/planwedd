@@ -21,17 +21,6 @@ async function getEventByIdUser(id) {
 	return res;
 }
 
-async function getDedicatoriasByEventID(id) {
-	let config = {
-		method: "GET",
-		headers: {
-			accept: "application/json",
-		},
-	};
-	let res = await fetch(`${URLf}/dedications/event${id}`, config);
-	return res;
-}
-
 // ? GIFTS PETITIONS
 async function getGiftsByEventId(id) {
 	const configuration = {
@@ -103,7 +92,6 @@ async function postDefaultGifts(data, key) {
 const petitions = {
 	getEvents,
 	getEventByIdUser,
-	getDedicatoriasByEventID,
 	getGiftsByEventId,
 	deleteGiftById,
 	postGiftByEventId,
