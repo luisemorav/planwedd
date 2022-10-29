@@ -72,8 +72,11 @@ const ExitButton = styled.div`
 `;
 const GiftDefaultEditModal = ({
 	valueBefore = 0,
+	defaultGifts,
 	editPriceModal,
 	HiddenModalEdit,
+	setDefaultGifts,
+	idDefaultGift,
 }) => {
 	return (
 		<Container style={{ display: editPriceModal }}>

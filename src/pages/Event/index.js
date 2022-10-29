@@ -190,7 +190,7 @@ const Event = () => {
 	const cargarEvento = async () => {
 		try {
 			const res = await petitions.getEventByIdUser(id);
-			console.log(res);
+			// console.log(res);
 			let eventData = await res.json();
 			if (res.status === 200) {
 				setEvent(eventData.data[0]);

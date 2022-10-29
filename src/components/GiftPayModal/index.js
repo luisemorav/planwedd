@@ -177,7 +177,7 @@ const GiftPayModal = ({
 	getGifts,
 }) => {
 	const { id } = useParams();
-	console.log(giftId);
+	// console.log(giftId);
 	function exportData(e) {
 		e.preventDefault();
 		const {
@@ -218,8 +218,8 @@ const GiftPayModal = ({
 							const date = await res.json();
 							const res2 = await petitions.deleteGiftById(giftId);
 							const date2 = await res2.json();
-							console.log(res);
-							console.log(res2);
+							// console.log(res);
+							// console.log(res2);
 							if (res.ok && res2.ok) {
 								Swal.fire({
 									title: "Exito!",
@@ -260,7 +260,7 @@ const GiftPayModal = ({
 				<PhotoContainer>
 					<ContainerTitles>
 						<TitleGift>{modalData.nombre}</TitleGift>
-						<TitleGift2>s/{modalData.descripcion}</TitleGift2>
+						<TitleGift2>{modalData.descripcion}</TitleGift2>
 						<TitleGiftPrice>s/{modalData.precio}</TitleGiftPrice>
 					</ContainerTitles>
 					<img src={modalData.img_regalo} alt="" />

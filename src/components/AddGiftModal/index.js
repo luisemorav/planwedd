@@ -1,7 +1,8 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import petitions from "../../api";
 import Swal from "sweetalert2";
+import UserContext from "../../context/UserContext";
 // import {}
 const Container = styled.div`
 	width: 100%;
@@ -94,6 +95,8 @@ const AddGiftModal = ({ modal, HiddenModal, getGifts }) => {
 	const [imgDefaultSize, setImgDefaultSize] = useState("0.00");
 	const [img, setImg] = useState("");
 
+	const { user } = useContext(UserContext);
+
 	function handleImg(e) {
 		setImg(e.target.files[0]);
 		const urlImg = URL.createObjectURL(e.target.files[0]);
@@ -125,9 +128,9 @@ const AddGiftModal = ({ modal, HiddenModal, getGifts }) => {
 			didOpen: async () => {
 				Swal.showLoading();
 				try {
-					const res = await petitions.postGiftByEventId(data);
+					const res = await petitions.postGiftByEventId(data, user.access_token);
 					const date = await res.json();
-					console.log(res);
+					// console.log(res);
 					if (res.ok) {
 						Swal.fire({
 							title: "Exito!",

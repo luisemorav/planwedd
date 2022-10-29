@@ -1,10 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import petitions from "../../api";
 import AddGiftModal from "../../components/AddGiftModal";
 import Swal from "sweetalert2";
 import GiftDefaultEditModal from "../../components/GiftDefaultEditModal";
 import giftsDefault from "../../api/giftsDefaults";
+
+import { useContext } from "react";
+import UserContext from "../../context/UserContext";
+
 const Container = styled.div`
 	width: 100%;
 	height: 100vh;
@@ -56,7 +61,6 @@ const GiftsDefault = styled.div`
 	gap: 30px;
 	padding: 30px;
 `;
-
 const AddCardGift = styled.button`
 	background-color: white;
 	width: 100%;
@@ -188,27 +192,55 @@ const CardListButtonDelete = styled.button`
 //     margin: 0;
 //     overflow: hidden;
 // `
-
+const ReturButton = styled.div`
+	width: 50px;
+	height: 50px;
+	background-color: white;
+	position: absolute;
+	top: 20px;
+	left: 20px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 2rem;
+	border-radius: 50%;
+	box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+	transition: background, color, transform, 0.3s;
+	&:hover {
+		background-color: lightgreen;
+		color: white;
+		transform: scale(1.2);
+	}
+`;
 const CreateGiftList = () => {
+	// let giftsDefaultEdit = giftsDefault
+	const [defaultGifts, setDefaultGifts] = useState(giftsDefault);
+	const { myEvent, user } = useContext(UserContext);
+	const idEvent = myEvent.event_id;
 	const [giftList, setGiftList] = useState("");
 	const [modal, setModal] = useState("none");
 	const [editPriceModal, setEditPriceModal] = useState("none");
 
+	const [idDefaultGift, setIdDefaultGift] = useState("");
+	function returnBack() {
+		window.history.back();
+	}
 	function ShowModal() {
 		setModal("flex");
 	}
 	function HiddenModal() {
 		setModal("none");
 	}
-	function ShowModalEdit() {
+	function ShowModalEdit(id) {
 		setEditPriceModal("flex");
+		console.log(id);
 	}
 	function HiddenModalEdit() {
 		setEditPriceModal("none");
 	}
 	async function getGifts() {
 		try {
-			const res = await petitions.getGiftsByEventId(1);
+			const res = await petitions.getGiftsByEventId(idEvent);
 			const { data } = await res.json();
 			if (res.status === 200) {
 				const gifts = [];
@@ -251,7 +283,7 @@ const CreateGiftList = () => {
 						try {
 							const res = await petitions.deleteGiftById(id);
 							const date = await res.json();
-							console.log(res);
+							// console.log(res);
 							if (res.ok) {
 								Swal.fire({
 									title: "Exito!",
@@ -284,32 +316,43 @@ const CreateGiftList = () => {
 	}
 	// ! POST DEFUALT GIFT CHANGE THE EVENT_ID
 	async function postDefaultGift(id) {
-		// console.log(id)
 		let data;
-		giftsDefault.forEach((e, i) => {
+
+		defaultGifts.forEach((e, i) => {
 			if (i === id) {
 				data = {
 					...e,
-					evento_id: 1,
+					evento_id: idEvent,
 				};
 			}
 		});
-		const res = await petitions.postDefaultGifts(data);
+		const res = await petitions.postDefaultGifts(data, user.access_token);
 		const response = await res.json();
 		console.log(response);
 		getGifts();
 	}
-	// console.log(giftsDefault)
+	// function ChangeEdit(idList){
+	//     ShowModalEdit()
+	//     setIdDefaultGift(idList)
+	// }
 	useEffect(() => {
 		getGifts();
 		console.log(giftList);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	return (
 		<Container>
+			<ReturButton onClick={returnBack}>
+				<i className="fa-solid fa-arrow-left"></i>
+			</ReturButton>
 			<GiftDefaultEditModal
+				defaultGifts={defaultGifts}
+				idDefaultGift={idDefaultGift}
 				editPriceModal={editPriceModal}
 				HiddenModalEdit={HiddenModalEdit}
+				setDefaultGifts={setDefaultGifts}
 			/>
+
 			<AddGiftModal
 				modal={modal}
 				HiddenModal={HiddenModal}
@@ -354,8 +397,8 @@ const CreateGiftList = () => {
 						<h4>Crear nuevo regalo</h4>
 					</AddCardGift>
 					{/* ForEach disable this when the user add the card default */}
-					{giftsDefault &&
-						giftsDefault.map((e, i) => {
+					{defaultGifts &&
+						defaultGifts.map((e, i) => {
 							return (
 								<CardGiftDefault key={i}>
 									<CardDefaultLeftContainer>
@@ -371,16 +414,13 @@ const CreateGiftList = () => {
 												display: "flex",
 												gap: "20px",
 											}}>
-											<ButtonGiftDefault
-												style={{ width: "50%" }}
-												onClick={ShowModalEdit}>
-												Editar
-											</ButtonGiftDefault>
+											{/* <ButtonGiftDefault style={{width:"50%"}} onClick={()=>ShowModalEdit(i)}>Editar</ButtonGiftDefault> */}
 											<ButtonGiftDefault
 												onClick={() =>
 													postDefaultGift(i)
 												}
-												style={{ width: "50%" }}>
+												//  style={{width:"50%"}}
+											>
 												Agregar
 											</ButtonGiftDefault>
 										</div>
