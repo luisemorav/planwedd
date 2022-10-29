@@ -118,7 +118,7 @@ const CardDefaultRightContainer = styled.div`
 	position: relative;
 `;
 const ButtonGiftDefault = styled.button`
-	background-color: white;
+	background-color: lightgray;
 	box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
 	font-weight: 600;
 	width: 100%;
@@ -177,7 +177,7 @@ const CardListPrice = styled.p`
 const CardListButtonDelete = styled.button`
 	width: 100%;
 	padding: 5px 10px;
-	background-color: white;
+	background-color: lightgray;
 	border: none;
 	border-radius: 5px;
 	font-weight: 600;
@@ -328,7 +328,13 @@ const CreateGiftList = () => {
 		});
 		const res = await petitions.postDefaultGifts(data, user.access_token);
 		const response = await res.json();
-		console.log(response);
+		Swal.fire({
+			title: "Regalo agregado!",
+			text: response.message,
+			icon: "success",
+			showConfirmButton: false,
+			timer: 1200,
+		});
 		getGifts();
 	}
 	// function ChangeEdit(idList){
@@ -337,7 +343,7 @@ const CreateGiftList = () => {
 	// }
 	useEffect(() => {
 		getGifts();
-		console.log(giftList);
+		// console.log(giftList);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	return (
