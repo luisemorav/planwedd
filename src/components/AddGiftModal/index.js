@@ -95,7 +95,9 @@ const AddGiftModal = ({ modal, HiddenModal, getGifts }) => {
 	const [imgDefaultSize, setImgDefaultSize] = useState("0.00");
 	const [img, setImg] = useState("");
 
-	const { user } = useContext(UserContext);
+	const { user, myEvent } = useContext(UserContext);
+
+	const eventId = myEvent.event_id
 
 	function handleImg(e) {
 		setImg(e.target.files[0]);
@@ -116,7 +118,7 @@ const AddGiftModal = ({ modal, HiddenModal, getGifts }) => {
 		formData.append("img_regalo", img);
 		formData.append("precio", precio);
 		formData.append("descripcion", descripcion);
-		formData.append("evento_id", 1);
+		formData.append("evento_id", eventId );
 		petition(formData);
 	}
 	async function petition(data) {
