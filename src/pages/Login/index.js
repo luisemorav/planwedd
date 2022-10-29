@@ -101,7 +101,28 @@ const LinkStyled = styled(Link)`
 	text-decoration: none;
 	text-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 `;
-
+// !LAST UPDATE
+const ReturnButton = styled.div`
+	width: 50px;
+	height: 50px;
+	background-color: white;
+	position: absolute;
+	top: 20px;
+	left: 20px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 2rem;
+	border-radius: 50%;
+	box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+	transition: background, color, transform, 0.3s;
+	&:hover {
+		background-color: lightgreen;
+		color: white;
+		transform: scale(1.2);
+	}
+`;
+// !
 const Login = () => {
 	const { user, login } = useContext(UserContext);
 
@@ -118,7 +139,9 @@ const Login = () => {
 	// if (localStorage.getItem("planweddlogin")) {
 	//     return <Navigate to="/createevent"/>
 	// }
-
+	function returBackPage() {
+		window.history.back();
+	}
 	const handleInputChange = (event) => {
 		setDatos({
 			...datos,
@@ -197,6 +220,9 @@ const Login = () => {
 
 	return (
 		<Container>
+			<ReturnButton onClick={returBackPage}>
+				<i className="fa-solid fa-arrow-left"></i>
+			</ReturnButton>
 			<ContainerForm onSubmit={enviarDatos}>
 				<CardRegister>
 					<CardTitle>Inicia Sesion!</CardTitle>

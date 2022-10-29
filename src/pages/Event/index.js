@@ -169,7 +169,6 @@ const ReturBottom = styled.div`
 	}
 `;
 const Event = () => {
-
 	let { id } = useParams();
 
 	const [event, setEvent] = useState([]);
@@ -186,6 +185,10 @@ const Event = () => {
 	}, []);
 
 	const cargarEvento = async () => {
+		window.scroll({
+			top: 0,
+			behavior: "auto",
+		});
 		try {
 			const res = await petitions.getEventByIdUser(id);
 			// console.log(res);
@@ -205,7 +208,7 @@ const Event = () => {
 				const eventId = eventData.data[0].id;
 
 				cargarDedicatorias(eventId);
-				
+
 				return;
 			} else if (res.status === 404) {
 				console.log(eventData["message"]);
@@ -226,7 +229,10 @@ const Event = () => {
 				},
 			};
 
-			const res = await fetch(`${URLf}/dedications/event${idEvent}`, config);
+			const res = await fetch(
+				`${URLf}/dedications/event${idEvent}`,
+				config
+			);
 			let dedicatoriasRaw = await res.json();
 
 			if (res.status === 200) {
@@ -270,10 +276,10 @@ const Event = () => {
 					<Buttons>
 						<Link
 							to={`/event/${event.usuario_id}/gifts/` + event.id}
-							style={{ textDecoration: "none"}}>
-							<Button style={{ backgroundColor: primary }} >
+							style={{ textDecoration: "none" }}>
+							<Button style={{ backgroundColor: primary }}>
 								<i
-									style={{ fontSize: "4rem"}}
+									style={{ fontSize: "4rem" }}
 									className="fa-solid fa-gift"></i>
 								<SubTitle>Dejar Regalo</SubTitle>
 							</Button>

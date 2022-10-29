@@ -151,7 +151,6 @@ const Main = () => {
 	// function showEvents(){
 	//     console.log(inputSearchValue)
 	// }
-
 	return (
 		<Container>
 			<NavBarView />
@@ -177,12 +176,15 @@ const Main = () => {
 					</Description>
 					{/* buttons */}
 					<ContainerButtons>
+						<Link to={"/register"}>
+							<ButtonLinkView
+								title="comenzar"
+								color={"white"}
+								bg={"black"}
+								size="1.5rem"></ButtonLinkView>
+						</Link>
 						<ButtonLinkView
-							title="comenzar"
-							color={"white"}
-							bg={"black"}
-							size="1.5rem"></ButtonLinkView>
-						<ButtonLinkView
+							move
 							title="regalar"
 							size="1.5rem"></ButtonLinkView>
 					</ContainerButtons>

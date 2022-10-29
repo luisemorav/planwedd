@@ -12,6 +12,7 @@ const Container = styled.button`
 	cursor: pointer;
 	user-select: none;
 `;
+
 const ButtonLink = ({
 	title,
 	bg = "white",
@@ -20,18 +21,25 @@ const ButtonLink = ({
 	url = "/",
 	width = "auto",
 	type = "submit",
+	move,
 }) => {
+	function MoveToSearch() {
+		console.log("move");
+		window.scroll({
+			top: 1000,
+			behavior: "smooth",
+		});
+	}
 	return (
 		<Container
-
-            style={{
-                    width: width,
-                    background: bg,
-                    color: color,
-                    fontSize: size,
-                }}>
-                {title}
-
+			onClick={move && MoveToSearch}
+			style={{
+				width: width,
+				background: bg,
+				color: color,
+				fontSize: size,
+			}}>
+			{title}
 		</Container>
 	);
 };
