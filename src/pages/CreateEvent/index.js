@@ -19,8 +19,6 @@ const CreateEvent = () => {
 	const [primaryColor, setPrimaryColor] = useState("#ffcda9");
 	const [secondaryColor, setSecondaryColor] = useState("#ffbd59");
 
-	const [linkEvento, setLinkEvento] = useState(window.location.host);
-
 	const navigate = useNavigate();
 
 	const [imgpreview, setImgpreview] = useState(
@@ -44,7 +42,7 @@ const CreateEvent = () => {
 	});
 
 	const [datosB, setDatosB] = useState({
-		banco: "",
+		banco: "Seleccionar...",
 		nro_cuenta: "",
 		titular: "",
 		usuario_id: user.id,
@@ -78,9 +76,9 @@ const CreateEvent = () => {
 				});
 
 				let mievento = {
-					event_id: eventData.data[0]["id"]
-				}
-				loadEvent(mievento)
+					event_id: eventData.data[0]["id"],
+				};
+				loadEvent(mievento);
 
 				if (user.cuenta_id !== null) {
 					cargarCuenta();
@@ -199,7 +197,7 @@ const CreateEvent = () => {
 					showConfirmButton: false,
 					didOpen: async () => {
 						Swal.showLoading();
-						
+
 						const formData = new FormData();
 
 						formData.set("nombre_evento", datosE.nombre_evento);
@@ -218,15 +216,18 @@ const CreateEvent = () => {
 								},
 								body: formData,
 							};
-							let response = await fetch("http://127.0.0.1:5000/events", config);
+							let response = await fetch(
+								"http://127.0.0.1:5000/events",
+								config
+							);
 							let json = await response.json();
-							console.log(json);
 							Swal.fire({
 								title: "Exito!",
-								text: "Se creó tu evento correctamente",
+								text: json.message,
 								icon: "success",
 								confirmButtonText: "aceptar",
 							});
+							cargarEvento();
 						} catch (error) {
 							console.log(error);
 							Swal.fire({
@@ -256,13 +257,10 @@ const CreateEvent = () => {
 						} catch (error) {
 							console.log(error);
 						}
-
 					},
 				});
 			}
 		});
-
-		
 	};
 
 	const actualizarDatos = async (event) => {
@@ -283,12 +281,8 @@ const CreateEvent = () => {
 				config
 			);
 			let json = await response.json();
-			console.log(json.messsage);
-			Swal.fire(
-				'Listo!',
-				'Se guardaron los cambios correctamente',
-				'success'
-			  )
+			Swal.fire("Listo!", json.messsage, "success");
+			cargarEvento();
 		} catch (error) {
 			console.log(error);
 		}
@@ -327,8 +321,7 @@ const CreateEvent = () => {
 	};
 
 	const cargarLista = () => {
-		
-		navigate("/createGift")
+		navigate("/createGift");
 	};
 
 	if (!user) {
@@ -340,7 +333,7 @@ const CreateEvent = () => {
 			<div className="card _backgroundOpacity p-3">
 				<div className="d-flex justify-content-between">
 					<h4>
-						Bienvenido{" "}
+						Bienvenid@{" "}
 						<strong>
 							{user
 								? `${user.nombres}`
@@ -366,7 +359,9 @@ const CreateEvent = () => {
 				<h5 className="text-center">
 					Link de tu evento:
 					<strong>
-						{existEvent ? ` ${linkEvento}/event/${user.id}` : "-"}
+						{existEvent
+							? ` ${window.location.host}/event/${user.id}`
+							: "-"}
 					</strong>
 				</h5>
 				<div className="card _backgroundOpacity">
@@ -438,7 +433,7 @@ const CreateEvent = () => {
 										htmlFor="portada"
 										className="form-label">
 										{existEvent
-											? "Tu foto de protada"
+											? "Tu foto de portada"
 											: "Agregar foto de portada"}
 									</label>
 									<img

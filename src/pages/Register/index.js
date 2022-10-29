@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-// import background from './register_img.jpg'
+import Swal from "sweetalert2";
 import styled from "styled-components";
 import ButtonLink from "../../components/MainComponents/ButtonLink";
 const Container = styled.div`
@@ -14,17 +14,6 @@ const Container = styled.div`
 	justify-content: center;
 	align-items: center;
 `;
-// const ContainerInfo = styled.div`
-//     width: 50%;
-//     height: 100%;
-//     background-color: pink;
-//     background: url("${background}");
-//     background-size: cover;
-//     background-position: center center;
-//     padding: 50px;
-//     display: flex;
-//     justify-content: center;
-// `
 const ContainerForm = styled.form`
 	width: 50%;
 	border-radius: 20px;
@@ -121,9 +110,6 @@ const Register = () => {
 		cpassword: "",
 	});
 
-	const [msgerr, setMsgerr] = useState("");
-	const [msginfo, setMsginfo] = useState("");
-
 	const navigate = useNavigate();
 
 	const handleInputChange = (event) => {
@@ -147,39 +133,76 @@ const Register = () => {
 				[event.target.name]: event.target.value,
 			});
 		}
-
 	};
 
 	const enviarDatos = async (event) => {
 		event.preventDefault();
 		if (validacion.password === validacion.cpassword) {
-			try {
-				let config = {
-					method: "POST",
-					headers: {
-						accept: "application/json",
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(datos),
-				};
-				let response = await fetch(
-					"http://127.0.0.1:5000/auth/signup",
-					config
-				);
+			Swal.fire({
+				title: "Registrando Usuario",
+				html: "Se está registrando tu usuario.",
+				timerProgressBar: true,
+				showConfirmButton: false,
+				didOpen: async () => {
+					Swal.showLoading();
 
-				if (response.status === 201) {
-					setMsginfo("El usuario se creó con éxito.");
-					setTimeout(() => {
-						navigate("/login");
-					}, 1000);
-				} else if (response.status === 409) {
-					setMsgerr("Ya existe el usuario ingresado.");
-				}
-			} catch (error) {
-				console.log(error);
-			}
+					try {
+						let config = {
+							method: "POST",
+							headers: {
+								accept: "application/json",
+								"Content-Type": "application/json",
+							},
+							body: JSON.stringify(datos),
+						};
+						let response = await fetch(
+							"http://127.0.0.1:5000/auth/signup",
+							config
+						);
+
+						if (response.status === 201) {
+							
+							Swal.fire({
+								title: "Registrado!",
+								text: "Te has registrado con éxito, ahora inicia sesión.",
+								icon: "success",
+								showConfirmButton: false,
+								timer: 2000,
+							});
+
+							navigate("/login");
+						} else if (response.status === 409) {
+							Swal.fire({
+								title: "Error!",
+								text: "Ya existe el usuario ingresado, cambie de usuario e intente nuevamente.",
+								icon: "error",
+								confirmButtonText: "aceptar",
+							});
+						} else {
+							Swal.fire({
+								title: "Error!",
+								text: "Ocurrió un error.",
+								icon: "error",
+								confirmButtonText: "aceptar",
+							});
+						}
+					} catch (error) {
+						Swal.fire({
+							title: "Error!",
+							text: error,
+							icon: "error",
+							confirmButtonText: "aceptar",
+						});
+					}
+				},
+			});
 		} else {
-			setMsgerr("Las contraseñas ingresadas no coinciden.");
+			Swal.fire({
+				title: "Error!",
+				text: "Las contraseñas ingresadas no coinciden.",
+				icon: "error",
+				confirmButtonText: "aceptar",
+			});
 		}
 	};
 
@@ -238,12 +261,6 @@ const Register = () => {
 						onChange={handleInputChange}
 						type={"password"}></InputForm>
 				</ContainerInput>
-				<p name="msgerror" style={{ color: "red" }}>
-					{msgerr}
-				</p>
-				<p name="msginfo" style={{ color: "green" }}>
-					{msginfo}
-				</p>
 				<ContainerInput>
 					<ButtonLink
 						title={"Registrarse"}
@@ -254,9 +271,6 @@ const Register = () => {
 					/>
 				</ContainerInput>
 			</ContainerForm>
-			{/* <ContainerInfo>
-                <CardRegister></CardRegister>
-            </ContainerInfo> */}
 		</Container>
 	);
 };

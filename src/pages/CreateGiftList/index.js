@@ -196,23 +196,49 @@ const CardListButtonDelete = styled.button`
 //     margin: 0;
 //     overflow: hidden;
 // `
-
+const ReturButton = styled.div`
+    width: 50px;
+    height: 50px;
+    background-color: white;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    font-size: 2rem;
+    border-radius: 50%;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    transition: background, color, transform, .3s;
+    &:hover{
+        background-color: lightgreen;
+        color: white;
+        transform: scale(1.2);
+    }
+`
 const CreateGiftList = ()=>{
+    // let giftsDefaultEdit = giftsDefault
+    const [defaultGifts, setDefaultGifts] = useState(giftsDefault)
     const { myEvent, user  } = useContext(UserContext);
     const idEvent = myEvent.event_id
     const token = user.access_token
     const [giftList, setGiftList] = useState("")
     const [modal, setModal] = useState("none")
     const [editPriceModal, setEditPriceModal] = useState("none")
-    
+
+    const [idDefaultGift, setIdDefaultGift] = useState("")
+    function returnBack(){
+        window.history.back();
+    }
     function ShowModal(){
         setModal("flex")
     }
     function HiddenModal(){
         setModal("none")
     }
-    function ShowModalEdit(){
+    function ShowModalEdit(id){
         setEditPriceModal("flex")
+        console.log(id)
     }
     function HiddenModalEdit(){
         setEditPriceModal("none")
@@ -297,8 +323,9 @@ const CreateGiftList = ()=>{
     }
     // ! POST DEFUALT GIFT CHANGE THE EVENT_ID 
     async function postDefaultGift(id){
-        let data
-        giftsDefault.forEach((e,i)=>{
+        let data;
+        
+        defaultGifts.forEach((e,i)=>{
             if(i === id){
                 data = {
                     ...e,
@@ -311,14 +338,22 @@ const CreateGiftList = ()=>{
         console.log(response)
         getGifts()
     }
-    // console.log(giftsDefault)
+    // function ChangeEdit(idList){
+    //     ShowModalEdit()
+    //     setIdDefaultGift(idList)
+    // }
     useEffect(()=>{
         getGifts()
         console.log(giftList)
     },[])
     return(
         <Container>
-            <GiftDefaultEditModal editPriceModal={editPriceModal} HiddenModalEdit={HiddenModalEdit}/>
+            <ReturButton onClick={returnBack}>
+                <i className="fa-solid fa-arrow-left"></i>
+            </ReturButton>
+            <GiftDefaultEditModal defaultGifts={defaultGifts} idDefaultGift={idDefaultGift} editPriceModal={editPriceModal} HiddenModalEdit={HiddenModalEdit} setDefaultGifts={setDefaultGifts}/>
+
+
             <AddGiftModal modal={modal} HiddenModal={HiddenModal} getGifts={getGifts}></AddGiftModal>
             <Title1>
                 <h2>crea tu lista de regalos</h2>
@@ -351,7 +386,7 @@ const CreateGiftList = ()=>{
                         <h4>Crear nuevo regalo</h4>
                     </AddCardGift>
                     {/* ForEach disable this when the user add the card default */}
-                    {giftsDefault && giftsDefault.map((e,i) =>{
+                    {defaultGifts && defaultGifts.map((e,i) =>{
                         return(
                             <CardGiftDefault key={i}>
                                 <CardDefaultLeftContainer>
@@ -359,8 +394,10 @@ const CreateGiftList = ()=>{
                                 </CardDefaultLeftContainer>
                                 <CardDefaultRightContainer >
                                     <div style={{width:"100%", display:"flex",gap:"20px"}}>
-                                        <ButtonGiftDefault style={{width:"50%"}} onClick={ShowModalEdit}>Editar</ButtonGiftDefault>
-                                        <ButtonGiftDefault onClick={()=>postDefaultGift(i)} style={{width:"50%"}}>Agregar</ButtonGiftDefault>
+                                        {/* <ButtonGiftDefault style={{width:"50%"}} onClick={()=>ShowModalEdit(i)}>Editar</ButtonGiftDefault> */}
+                                        <ButtonGiftDefault onClick={()=>postDefaultGift(i)}
+                                        //  style={{width:"50%"}}
+                                         >Agregar</ButtonGiftDefault>
                                     </div>
                                     <CardDefaultTitle>{e.nombre}</CardDefaultTitle>
                                     <CardDefaultPrice>s/{e.precio}</CardDefaultPrice>

@@ -259,7 +259,7 @@ const GiftPayModal = ({showGiftModal, hiddenGiftModal,modalData, giftId, getGift
                 <PhotoContainer>
                     <ContainerTitles>
                         <TitleGift>{modalData.nombre}</TitleGift>
-                        <TitleGift2>s/{modalData.descripcion}</TitleGift2>
+                        <TitleGift2>{modalData.descripcion}</TitleGift2>
                         <TitleGiftPrice>s/{modalData.precio}</TitleGiftPrice>
                     </ContainerTitles>
                     <img src={modalData.img_regalo} alt=""/>

@@ -70,7 +70,7 @@ const ExitButton = styled.div`
         color: white;
     }
 `
-const GiftDefaultEditModal = ({valueBefore = 0, editPriceModal,HiddenModalEdit})=>{
+const GiftDefaultEditModal = ({valueBefore = 0,defaultGifts, editPriceModal,HiddenModalEdit, setDefaultGifts,idDefaultGift})=>{
     
     return(
         <Container style={{display:editPriceModal}}>
