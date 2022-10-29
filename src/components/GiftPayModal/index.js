@@ -195,18 +195,18 @@ const GiftPayModal = ({
 
 		Swal.fire({
 			title: "Estas seguro?",
-			text: "este regalo sera eliminado si aceptas",
+			text: "Una vez efectuado el regalo no hay vuelta atrás",
 			icon: "warning",
 			showCancelButton: true,
-			confirmButtonColor: "#008080",
-			cancelButtonColor: "#ff6347",
-			confirmButtonText: "Eliminar",
+			confirmButtonColor: "#35a4587",
+			cancelButtonColor: "#979797",
+			confirmButtonText: "A Darle!",
 			cancelButtonText: "Cancelar",
 		}).then((result) => {
 			if (result.isConfirmed) {
 				Swal.fire({
-					title: "Eliminando Regalo",
-					html: "esto puede tardar un poco dependiendo de tu internet",
+					title: "Ofreciendo Regalo",
+					html: "Esto puede tardar un poco dependiendo de tu ancho de banda.",
 					timerProgressBar: true,
 					showConfirmButton: false,
 					didOpen: async () => {
@@ -223,7 +223,7 @@ const GiftPayModal = ({
 							if (res.ok && res2.ok) {
 								Swal.fire({
 									title: "Exito!",
-									text: "El regalo se compro con exito!",
+									text: "El regalo se realizó con exito!",
 									icon: "success",
 									confirmButtonText: "aceptar",
 								});
