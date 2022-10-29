@@ -4,6 +4,7 @@ import petitions from "../../api";
 import Swal from "sweetalert2";
 import UserContext from "../../context/UserContext";
 import "./master.css";
+import URLf from "../../api/config";
 
 const CreateEvent = () => {
 	const { user, logout, loadEvent } = useContext(UserContext);
@@ -104,7 +105,7 @@ const CreateEvent = () => {
 				},
 			};
 			let res = await fetch(
-				`http://127.0.0.1:5000/baccounts/${user.cuenta_id}`,
+				`${URLf}/baccounts/${user.cuenta_id}`,
 				config
 			);
 			let cuentaData = await res.json();
@@ -217,7 +218,7 @@ const CreateEvent = () => {
 								body: formData,
 							};
 							let response = await fetch(
-								"http://127.0.0.1:5000/events",
+								`${URLf}/events`,
 								config
 							);
 							let json = await response.json();
@@ -249,7 +250,7 @@ const CreateEvent = () => {
 								body: JSON.stringify(datosB),
 							};
 							let response = await fetch(
-								"http://127.0.0.1:5000/baccounts",
+								`${URLf}/baccounts`,
 								config
 							);
 							let json = await response.json();
@@ -277,7 +278,7 @@ const CreateEvent = () => {
 				body: JSON.stringify(datosE),
 			};
 			let response = await fetch(
-				`http://127.0.0.1:5000/events/${evento["id"]}`,
+				`${URLf}/events/${evento["id"]}`,
 				config
 			);
 			let json = await response.json();
@@ -301,7 +302,7 @@ const CreateEvent = () => {
 				body: JSON.stringify(datosB2),
 			};
 			let response = await fetch(
-				`http://127.0.0.1:5000/baccounts/${user.cuenta_id}`,
+				`${URLf}/baccounts/${user.cuenta_id}`,
 				config
 			);
 			let json = await response.json();

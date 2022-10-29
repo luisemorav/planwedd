@@ -24,7 +24,8 @@ const Router = ()=>{
 					path="*"
 					element={
 						<main style={{ padding: "1rem" }}>
-							<p>Esta página no existe</p>
+                            <h2 className="text-center">Error 404</h2>
+							<p className="text-center">Esta página no existe</p>
 						</main>
 					}
 				/>

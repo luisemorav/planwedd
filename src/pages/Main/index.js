@@ -51,12 +51,12 @@ const ContainerButtons = styled.div`
 //! mejorar en el futuro =>
 const ContainerSearch = styled.div`
 	width: 100%;
-	height: 100vh;
+	height: auto;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	padding: 200px 0;
 	gap: 20px;
+	margin-bottom: 50px;
 `;
 const ContainerSearchInput = styled.div`
 	min-width: 350px;

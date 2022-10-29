@@ -80,14 +80,7 @@ const Buttons = styled.div`
 	justify-content: end;
 	align-items: center;
 `;
-const UlContainer = styled.ul`
-	margin-left: 25px;
-	li {
-		font-size: 1.2rem;
-		font-weight: 700;
-		color: rgba(0, 0, 0, 0.6);
-	}
-`;
+
 const Button = styled.button`
 	background-color: white;
 	box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.15);
@@ -287,8 +280,6 @@ const Event = () => {
 					</Cards>
 				</CardContainer>
 			</ContainerDedicatorias>
-			{/* other interactions */}
-			{/* <GiftList status={showListGifts}  hideGifts={hideGifts}></GiftList> */}
 		</Container>
 	);
 };

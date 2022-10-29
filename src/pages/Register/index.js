@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import styled from "styled-components";
 import ButtonLink from "../../components/MainComponents/ButtonLink";
+import URLf from "../../api/config";
+
 const Container = styled.div`
 	background-color: white;
 	background: url("https://images.pexels.com/photos/1295994/pexels-photo-1295994.jpeg");
@@ -95,6 +97,7 @@ const LinkStyled = styled(Link)`
 	text-decoration: none;
 	text-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 `;
+
 const Register = () => {
 	const [datos, setDatos] = useState({
 		nombres: "",
@@ -156,7 +159,7 @@ const Register = () => {
 							body: JSON.stringify(datos),
 						};
 						let response = await fetch(
-							"http://127.0.0.1:5000/auth/signup",
+							`${URLf}/auth/signup`,
 							config
 						);
 

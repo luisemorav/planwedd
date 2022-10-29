@@ -1,13 +1,5 @@
-// import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-// const LinkStyled = styled(Link)`
-//     /* background-color: red; */
-//     width: ${props => props.full ? props.full : "auto"};
-//     button {
-//         width: ${props => props.full ? props.full : "auto"};
-//     }
-// `
 const Container = styled.button`
 	/* background-color: ${(props) => (props.xd ? "blue" : "green")}; */
 	/* width: 100%; */

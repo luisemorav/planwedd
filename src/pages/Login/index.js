@@ -4,6 +4,8 @@ import ButtonLink from "../../components/MainComponents/ButtonLink";
 import { useContext, useState } from "react";
 import UserContext from "../../context/UserContext";
 import Swal from "sweetalert2";
+import URLf from "../../api/config";
+
 const Container = styled.div`
 	background-color: white;
 	background: url("https://images.pexels.com/photos/1295994/pexels-photo-1295994.jpeg");
@@ -18,17 +20,6 @@ const Container = styled.div`
 	justify-content: center;
 	align-items: center;
 `;
-// const ContainerInfo = styled.div`
-//     width: 50%;
-//     height: 100%;
-//     background-color: pink;
-//     background: url("${background}");
-//     background-size: cover;
-//     background-position: center center;
-//     padding: 50px;
-//     display: flex;
-//     justify-content: center;
-// `
 const ContainerForm = styled.form`
 	width: 50%;
 	height: 90%;
@@ -148,7 +139,7 @@ const Login = () => {
 				body: JSON.stringify(datos),
 			};
 
-			let res = await fetch("http://127.0.0.1:5000/auth/signin", config);
+			let res = await fetch(`${URLf}/auth/signin`, config);
 			let json = await res.json();
 			if (res.ok) {
 				let config = {
@@ -158,7 +149,7 @@ const Login = () => {
 						Authorization: `Bearer ${json["access_token"]}`,
 					},
 				};
-				let res = await fetch("http://127.0.0.1:5000/users/me", config);
+				let res = await fetch(`${URLf}/users/me`, config);
 				let user = await res.json();
 				if (user["data"]["cuentas"].length === 0) {
 					let session = {
@@ -238,9 +229,6 @@ const Login = () => {
 					/>
 				</ContainerInput>
 			</ContainerForm>
-			{/* <ContainerInfo>
-                <CardRegister></CardRegister>
-            </ContainerInfo> */}
 		</Container>
 	);
 };

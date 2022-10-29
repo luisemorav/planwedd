@@ -1,7 +1,7 @@
-import URL from "./config";
+import URLf from "./config";
 
 async function getEvents() {
-	const response = await fetch(URL + "/events", {
+	const response = await fetch(URLf + "/events", {
 		method: "GET",
 		headers: {
 			accept: "application/json",
@@ -17,7 +17,7 @@ async function getEventByIdUser(id) {
 			accept: "application/json",
 		},
 	};
-	let res = await fetch(`${URL}/events${id}`, config);
+	let res = await fetch(`${URLf}/events${id}`, config);
 	return res;
 }
 
@@ -28,7 +28,7 @@ async function getDedicatoriasByEventID(id) {
 			accept: "application/json",
 		},
 	};
-	let res = await fetch(`${URL}/dedications/event${id}`, config);
+	let res = await fetch(`${URLf}/dedications/event${id}`, config);
 	return res;
 }
 
@@ -40,21 +40,20 @@ async function getGiftsByEventId(id) {
 			accept: "application/json",
 		},
 	};
-	const res = await fetch(`${URL}/gifts/event${id}`, configuration);
+	const res = await fetch(`${URLf}/gifts/event${id}`, configuration);
 	return res;
 }
 
 // ! DELETE PETITIONS
-// !change the key bearer
+
 async function deleteGiftById(id) {
 	const configuration = {
 		method: "DELETE",
 		headers: {
 			accept: "aplication/json",
-			// "Authorization": key
 		},
 	};
-	const res = await fetch(`${URL}/gifts/${id}`, configuration);
+	const res = await fetch(`${URLf}/gifts/${id}`, configuration);
 	return res;
 }
 
@@ -70,7 +69,7 @@ async function postGiftByEventId(data, key) {
 		method: "POST",
 		body: data,
 	};
-	const res = await fetch(`${URL}/gifts`, configuration);
+	const res = await fetch(`${URLf}/gifts`, configuration);
 	return res;
 }
 async function postDedicatoria(data) {
@@ -83,7 +82,7 @@ async function postDedicatoria(data) {
 		method: "POST",
 		body: dedicatoria,
 	};
-	const res = await fetch(`${URL}/dedications`, configuration);
+	const res = await fetch(`${URLf}/dedications`, configuration);
 	return res;
 }
 async function postDefaultGifts(data, key) {
@@ -97,7 +96,7 @@ async function postDefaultGifts(data, key) {
 		method: "POST",
 		body: gift,
 	};
-	const res = await fetch(`${URL}/gifts/soft`, configuration);
+	const res = await fetch(`${URLf}/gifts/soft`, configuration);
 	return res;
 }
 

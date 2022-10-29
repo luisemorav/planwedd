@@ -1,6 +1,7 @@
-// import background from './card-img.jpg'
+
 import styled from 'styled-components'
 import { ButtonLinkView } from '../'
+
 const Container = styled.div`
     width: 100%;
     /* height: 100vh; */
